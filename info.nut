@@ -136,9 +136,16 @@ class HmrcGSInfo extends GSInfo
 	function GetSettings()
 		for (local i = 0; i < SELF_SETTINGS.len(); i++)
 		{
-			AddSetting(SELF_SETTINGS[i])
-			if ("labels" in SELF_SETTINGS[i])
-				AddLabels(SELF_SETTING[i].name, SELF_SETTINGS[i].labels)
+			local setting = SELF_SETTINGS[i]
+			local labels = null
+			if ("labels" in setting)
+			{
+				labels = setting.labels
+				delete setting.labels
+			}
+			AddSetting(setting)
+			if (labels)
+				AddLabels(setting.name, labels)
 		}
 }
 
