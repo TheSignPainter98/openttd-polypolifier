@@ -1,0 +1,11 @@
+DOMAIN <- "gov"
+
+ANNUITY <- DOMAIN + ".annuity_sum"
+BANDIT_TAX_RATE <- DOMAIN + ".bandit_tax_rate"
+BANDIT_TAX_MIN <- DOMAIN + ".bandit_tax_min"
+ROBIN_HOOD_RATE <- DOMAIN + ".robin_hood_rate"
+BOE_POT_RATE <- DOMAIN + ".pot_rate"
+BOE_POT_RECUPERATION_RATE <- DOMAIN + ".pot_recuperation_rate"
+BOE_POT_CAP <- DOMAIN + ".pot_cap"
+BOE_POT_OVERDRAFT_CAP <- DOMAIN + ".pot_overdraft_cap"
+GRACE_MARGIN <- DOMAIN + ".grace_margin"

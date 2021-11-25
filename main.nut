@@ -1,4 +1,5 @@
 require("version.nut")
+require("setting_names.nut")
 
 // Bandit tax rate must always be HIGHER than the robin hood tax rate to ensure players submit to the scheme
 
@@ -76,10 +77,11 @@ function HmrcGS::SaveDate(date)
 
 function HmrcGS::LoadDate(date)
 	if (date)
-		return GetDate(date.year, date.month, date.day)
+		return GSDate.GetDate(date.year, date.month, date.day)
 
 function HmrcGS::Start()
 {
+	GetSettings()
 	/* local london = 1 */
 	/* local towns = GSTownList() */
 	/* local town = towns.Begin() */
@@ -111,6 +113,8 @@ function HmrcGS::Start()
 		if (!In(stim_months, curr_month))
 			continue
 
+		GetSettings()
+
 		UpdateLoan()
 
 		GSLog.Error("================================================================================")
@@ -140,6 +144,42 @@ function HmrcGS::Start()
 		GSLog.Error("Gov currently owes HM Treasury " + loan_amount)
 		GSLog.Error("================================================================================")
 	}
+}
+
+function HmrcGS::GetSettings()
+{
+	loan_monthly_rate = GetPercentageSetting(::BOE_POT_RATE)
+	loan_recuperation_rate = GetPercentageSetting(::BOE_POT_RECUPERATION_RATE)
+	loan_cap = GetSetting(::BOE_POT_CAP)
+	loan_overdraft_cap = GetSetting(::BOE_POT_OVERDRAFT_CAP)
+	grace_epsilon = GetSetting(::GRACE_MARGIN)
+	poll_annuity = GetSetting(::ANNUITY)
+	bandit_tax_rate = GetPercentageSetting(::BANDIT_TAX_RATE)
+	bandit_tax_min = GetSetting(::BANDIT_TAX_MIN)
+	robin_hood_basic_rate = GetSetting(::ROBIN_HOOD_RATE)
+
+	GSLog.Error("loan_monthly_rate:" + loan_monthly_rate)
+	GSLog.Error("loan_recuperation_rate:" + loan_recuperation_rate)
+	GSLog.Error("loan_cap:" + loan_cap)
+	GSLog.Error("loan_overdraft_cap:" + loan_overdraft_cap)
+	GSLog.Error("grace_epsilon:" + grace_epsilon)
+	GSLog.Error("poll_annuity:" + poll_annuity)
+	GSLog.Error("bandit_tax_rate:" + bandit_tax_rate)
+	GSLog.Error("bandit_tax_min:" + bandit_tax_min)
+	GSLog.Error("robin_hood_basic_rate:" + robin_hood_basic_rate)
+}
+
+function HmrcGS::GetPercentageSetting(name)
+{
+	return GetSetting(name) / 100.0
+}
+
+function HmrcGS::GetSetting(name)
+{
+	local v = ::GSController.GetSetting(name)
+	if (v == -1)
+		GSLog.Error("Unknown setting: " + name)
+	return v
 }
 
 function HmrcGS::In(list, val)
