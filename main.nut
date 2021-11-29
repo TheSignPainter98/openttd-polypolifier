@@ -45,7 +45,7 @@ function HmrcGS::Save()
 
 function HmrcGS::Load(version, data)
 {
-	if (version != VERSION)
+	if (version != ::VERSION)
 		return
 
 	wdate = LoadDate(data.wdate)
@@ -102,7 +102,7 @@ function HmrcGS::Start()
 
 		AwaitDate(GSDate.GetDate(next_stim_year, curr_month + 1, stim_day))
 		curr_month = GSDate.GetMonth(GSDate.GetCurrentDate())
-		GSLog.Error("=== " + curr_month + ", " + In(stim_months, curr_month))
+		GSLog.Error("=== Stim on month " + curr_month + "? " + (In(stim_months, curr_month) ? "yes" : "no"))
 		if (!In(stim_months, curr_month))
 			continue
 
@@ -232,7 +232,6 @@ function HmrcGS::GetCompanyInfo(id)
 	company.robin_hood_priority <- GetRobinHoodPriority(company)
 
 	GSLog.Error("<<<")
-	GSLog.Error("len: " + company.len)
 	GSLog.Error("id: " + company.id)
 	GSLog.Error("name: " + company.name)
 	GSLog.Error("hq: " + company.hq)
