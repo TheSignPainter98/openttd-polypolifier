@@ -1,0 +1,7 @@
+ANNOUNCEMENT_NO_HQ		:FREE MONEY BONANZA! Government announces tax breaks and new stimulus scheme for all companies headquartered in the UK and ROI. Commuters shocked and appalled to learn that Company {COMPANY} does not have its HQ in the UK/ROI, and hence will not benefit
+ANNOUNCEMENT_HQ			:\"It's the nanny-state gone mad\" says Farage. Government announces tax breaks and new stimulus scheme for all companies headquartered in the UK and ROI.
+ROBIN_HOODED			:SNOWFLAKE LIBERALS AT IT AGAIN! {COMPANY} selected by the government to receive a stimulus grant of £
+POLL_ANNUITIED			:BRITAIN TAKES BACK CONTROL OF HER FINANCES! Government announces stimulus package of £{NUM} for all UK and ROI transport companies
+POLL_ANNUITY_MISSED		:As transport companies around the UK and ROI take their £{NUM} poll annuity, questions are asked why {COMPANY} hasn't moved their HQ to the British Isles
+RH_CANNOT_OPERATE		:Westminster panic as Gov. study shows only {NUM} in {NUM} companies take up new Robin Hood tax benefit scheme for UK&ROI-based companies
+RECUPERATION_TAX_RISE	:Government out of money! Tax rate for Q{NUM} temporarily increased for top 50% of companies to help clear Treasury log jam

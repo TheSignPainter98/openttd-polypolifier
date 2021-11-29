@@ -26,13 +26,6 @@ class HmrcGS extends GSController
 	bandit_tax_min = 5500
 	robin_hood_basic_rate = 0.10
 	wdate = null
-
-	ANNOUNCEMENT_NO_HQ = [ "FREE MONEY BONANZA! Government announces tax breaks and new stimulus scheme for all companies headquartered in the UK and ROI. Commuters shocked and appalled to learn that Company ", " does not have its HQ in the UK/ROI, and hence will not benefit" ]
-	ANNOUNCEMENT_HQ = "\"It's the nanny-state gone mad!\" says Farage. Government announces tax breaks and new stimulus scheme for all companies headquartered in the UK and ROI."
-	ROBIN_HOODED = [ "SNOWFLAKE LIBERALS AT IT AGAIN! ", " selected by the government to receive a stimulus grant of £" ]
-	POLL_ANNUITIED = [ "BRITAIN TAKES BACK CONTROL OF HER FINANCES! Government announces stimulus package of £", " for all UK and ROI transport companies" ]
-	POLL_ANNUITY_MISSED = [ "As transport companies around the UK and ROI take their £", " poll annuity, questions are asked why ", " hasn't moved their HQ to the British Isles" ]
-	RH_CANNOT_OPERATE = [ "Westminster panic as Gov. study shows only ", " in ", " companies take up new \"Robin Hood\" tax benefit scheme for UK&ROI-based companies" ]
 }
 
 function HmrcGS::Save()
@@ -198,33 +191,12 @@ function HmrcGS::SendWelcomeMessages(companies)
 	{
 		local company = companies[i]
 		if (company.hq == GSMap.TILE_INVALID)
-			GSNews.Create(GSNews.NT_GENERAL, format(ANNOUNCEMENT_NO_HQ, company.id + 1), company.id, GSNews.NR_NONE, 0)
+			GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.ANNOUNCEMENT_NO_HQ, company.id + 1), company.id, GSNews.NR_NONE, 0)
 		else
 			GSNews.Create(GSNews.NT_GENERAL, ANNOUNCEMENT_HQ, company.id, GSNews.NR_NONE, company.hq)
 	}
 
 	GSLog.Error("Done sending welcome messages")
-}
-
-function HmrcGS::format(fmt_str_parts, ...)
-{
-	// A bad format function because the global one from the standard library isn't available
-	local str = ""
-	local i = 0
-	local j = 0
-	local n = fmt_str_parts.len()
-	while (true)
-	{
-		if (i < n)
-			str += fmt_str_parts[i]
-		if (j < vargc)
-			str += vargv[j]
-		if (!(i < n || j < vargc))
-			break
-		i++
-		j++
-	}
-	return str
 }
 
 function HmrcGS::AwaitDate(wdate)
@@ -354,7 +326,7 @@ function HmrcGS::DoRobinHoodScheme(companies)
 		for (local i = 0; i < n_companies; i++)
 			if (companies[i].hq != GSMap.TILE_INVALID)
 				built_hqs++
-		GSNews.Create(GSNews.NT_GENERAL, format(RH_CANNOT_OPERATE, built_hqs, n_companies), GSCompany.COMPANY_INVALID, GSNews.NR_NONE, 0)
+		GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.RH_CANNOT_OPERATE, built_hqs, n_companies), GSCompany.COMPANY_INVALID, GSNews.NR_NONE, 0)
 		return
 	}
 
@@ -418,11 +390,11 @@ function HmrcGS::IssueUBI(companies)
 		local company = companies[i]
 		if (company.hq == GSMap.TILE_INVALID)
 		{
-			GSNews.Create(GSNews.NT_GENERAL, format(POLL_ANNUITY_MISSED, poll_annuity, company.name), company.id, GSNews.NR_NONE, 0)
+			GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.POLL_ANNUITY_MISSED, poll_annuity, company.name), company.id, GSNews.NR_NONE, 0)
 			continue
 		}
 
-		GSNews.Create(GSNews.NT_GENERAL, format(POLL_ANNUITIED, poll_annuity), company.id, GSNews.NR_NONE, 0)
+		GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.POLL_ANNUITIED, poll_annuity), company.id, GSNews.NR_NONE, 0)
 		Pay(company, poll_annuity)
 		loan_amount += poll_annuity
 	}
