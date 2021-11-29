@@ -1,8 +1,6 @@
 require("version.nut")
 require("setting_names.nut")
 
-gs_info <- GSInfo()
-
 SELF_SETTINGS <- [
 	{
 		name = ANNUITY
@@ -15,7 +13,7 @@ SELF_SETTINGS <- [
 		custom_value = 25000
 		random_deviation = 0
 		step_size = 5000
-		flags = gs_info.CONFIG_INGAME
+		flags = GSInfo.CONFIG_INGAME
 	}
 	{
 		name = BANDIT_TAX_RATE
@@ -28,7 +26,7 @@ SELF_SETTINGS <- [
 		custom_value = 5
 		random_deviation = 0
 		step_size = 5
-		flags = gs_info.CONFIG_INGAME
+		flags = GSInfo.CONFIG_INGAME
 	}
 	{
 		name = BANDIT_TAX_MIN
@@ -41,7 +39,7 @@ SELF_SETTINGS <- [
 		custom_value = 5500
 		random_deviation = 0
 		step_size = 500
-		flags = gs_info.CONFIG_INGAME
+		flags = GSInfo.CONFIG_INGAME
 	}
 	{
 		name = ROBIN_HOOD_RATE
@@ -54,7 +52,7 @@ SELF_SETTINGS <- [
 		custom_value = 10
 		random_deviation = 0
 		step_size = 1
-		flags = gs_info.CONFIG_INGAME
+		flags = GSInfo.CONFIG_INGAME
 	}
 	{
 		name = BOE_POT_RATE
@@ -67,7 +65,7 @@ SELF_SETTINGS <- [
 		custom_value = 5
 		random_deviation = 0
 		step_size = 1
-		flags = gs_info.CONFIG_INGAME
+		flags = GSInfo.CONFIG_INGAME
 	}
 	{
 		name = BOE_POT_RECUPERATION_RATE
@@ -80,7 +78,7 @@ SELF_SETTINGS <- [
 		custom_value = 30
 		random_deviation = 0
 		step_size = 1
-		flags = gs_info.CONFIG_INGAME
+		flags = GSInfo.CONFIG_INGAME
 	}
 	{
 		name = BOE_POT_CAP
@@ -93,7 +91,7 @@ SELF_SETTINGS <- [
 		custom_value = 10000000
 		random_deviation = 0
 		step_size = 500000
-		flags = gs_info.CONFIG_INGAME
+		flags = GSInfo.CONFIG_INGAME
 	}
 	{
 		name = BOE_POT_OVERDRAFT_CAP
@@ -106,7 +104,7 @@ SELF_SETTINGS <- [
 		custom_value = 5000000
 		random_deviation = 0
 		step_size = 500000
-		flags = gs_info.CONFIG_INGAME
+		flags = GSInfo.CONFIG_INGAME
 	}
 	{
 		name = GRACE_MARGIN
@@ -119,7 +117,7 @@ SELF_SETTINGS <- [
 		custom_value = 50000
 		random_deviation = 0
 		step_size = 10000
-		flags = gs_info.CONFIG_INGAME
+		flags = GSInfo.CONFIG_INGAME
 	}
 ]
 
