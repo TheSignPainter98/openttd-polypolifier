@@ -10,12 +10,12 @@ class HmrcGS extends GSController
 	function Start();
 
 	scheme_introduction_delay_years = 0 // TODO: 1
-	loan_monthly_rate = 0.05
-	loan_recuperation_rate = 0.30
-	loan_amount = 0
-	loan_cap = 10000000
-	loan_min = -5000000
-	prev_loan_update_month = null
+	pot_monthly_rate = 0.05
+	pot_recuperation_rate = 0.30
+	pot_amount = 0
+	pot_cap = 10000000
+	pot_overdraft_cap = 5000000
+	prev_pot_update_month = null
 	grace_epsilon = 50000
 	poll_annuity = 20000
 	poll_annuity_issue_months = [ 4 ]
@@ -31,14 +31,14 @@ class HmrcGS extends GSController
 function HmrcGS::Save()
 {
 	local data = {
-		loan_amount = SaveFloat(loan_amount)
+		pot_amount = SaveFloat(pot_amount)
 		send_welcome_message = send_welcome_message
 	}
 
 	if (wdate)
 		data.wdate <- SaveDate(wdate)
-	if (prev_loan_update_month)
-		data.prev_loan_update_month <- prev_loan_update_month
+	if (prev_pot_update_month)
+		data.prev_pot_update_month <- prev_pot_update_month
 
 	return data
 }
@@ -49,8 +49,8 @@ function HmrcGS::Load(version, data)
 		return
 
 	wdate = LoadDate(data.wdate)
-	prev_loan_update_month = data.prev_loan_update_month
-	loan_amount = LoadFloat(data.loan_amount)
+	prev_pot_update_month = data.prev_pot_update_month
+	pot_amount = LoadFloat(data.pot_amount)
 	send_welcome_message = data.send_welcome_message
 }
 
@@ -134,27 +134,27 @@ function HmrcGS::Start()
 			DoRobinHoodScheme(companies)
 
 		GSLog.Error("The current bank balance of 0 is " + GSCompany.GetBankBalance(0))
-		GSLog.Error("Gov currently owes HM Treasury " + loan_amount)
+		GSLog.Error("Gov currently owes HM Treasury " + pot_amount)
 		GSLog.Error("================================================================================")
 	}
 }
 
 function HmrcGS::GetSettings()
 {
-	loan_monthly_rate = GetPercentageSetting(::BOE_POT_RATE)
-	loan_recuperation_rate = GetPercentageSetting(::BOE_POT_RECUPERATION_RATE)
-	loan_cap = GetSetting(::BOE_POT_CAP)
-	loan_overdraft_cap = GetSetting(::BOE_POT_OVERDRAFT_CAP)
+	pot_monthly_rate = GetPercentageSetting(::BOE_POT_RATE)
+	pot_recuperation_rate = GetPercentageSetting(::BOE_POT_RECUPERATION_RATE)
+	pot_cap = GetSetting(::BOE_POT_CAP)
+	pot_overdraft_cap = GetSetting(::BOE_POT_OVERDRAFT_CAP)
 	grace_epsilon = GetSetting(::GRACE_MARGIN)
 	poll_annuity = GetSetting(::ANNUITY)
 	bandit_tax_rate = GetPercentageSetting(::BANDIT_TAX_RATE)
 	bandit_tax_min = GetSetting(::BANDIT_TAX_MIN)
 	robin_hood_basic_rate = GetSetting(::ROBIN_HOOD_RATE)
 
-	GSLog.Error("loan_monthly_rate:" + loan_monthly_rate)
-	GSLog.Error("loan_recuperation_rate:" + loan_recuperation_rate)
-	GSLog.Error("loan_cap:" + loan_cap)
-	GSLog.Error("loan_overdraft_cap:" + loan_overdraft_cap)
+	GSLog.Error("pot_monthly_rate:" + pot_monthly_rate)
+	GSLog.Error("pot_recuperation_rate:" + pot_recuperation_rate)
+	GSLog.Error("pot_cap:" + pot_cap)
+	GSLog.Error("pot_overdraft_cap:" + pot_overdraft_cap)
 	GSLog.Error("grace_epsilon:" + grace_epsilon)
 	GSLog.Error("poll_annuity:" + poll_annuity)
 	GSLog.Error("bandit_tax_rate:" + bandit_tax_rate)
@@ -259,15 +259,15 @@ function HmrcGS::GetCapitalTaxPriority(company)
 function HmrcGS::UpdateLoan()
 {
 	local curr_month = GSDate.GetMonth(GSDate.GetCurrentDate())
-	if (curr_month != prev_loan_update_month && loan_amount > 0)
+	if (curr_month != prev_pot_update_month && pot_amount > 0)
 	{
-		prev_loan_update_month = curr_month
-		loan_amount *= 1 + loan_monthly_rate
+		prev_pot_update_month = curr_month
+		pot_amount *= 1 + pot_monthly_rate
 	}
-	if (loan_amount > loan_cap)
-		loan_amount = loan_cap
-	else if (loan_amount < loan_min)
-		loan_amount = loan_min
+	if (pot_amount < -pot_cap)
+		pot_amount = -pot_cap
+	else if (pot_amount > pot_overdraft_cap)
+		pot_amount = pot_overdraft_cap
 }
 
 function HmrcGS::BanditTax(companies)
@@ -282,7 +282,7 @@ function HmrcGS::BanditTax(companies)
 			local bandit_tax = Max(company.balance * bandit_tax_rate, bandit_tax_min)
 			Tax(company, bandit_tax)
 			GSLog.Error("Bandit tax levied: " + bandit_tax + " for balance " + company.balance)
-			loan_amount -= bandit_tax
+			pot_amount -= bandit_tax
 		}
 	}
 }
@@ -335,27 +335,43 @@ function HmrcGS::DoRobinHoodScheme(companies)
 	for (local i = 0; i < to_tax.len(); i++)
 		taxables_tot_value += to_tax[i].q_value
 
-	GSNews.Create(GSNews.NT_GENERAL, format(ROBIN_HOODED, company_name, grant), beneficiary.name, GSNews.NR_NONE, 0)
-	Pay(beneficiary, grant)
-
-	for (local i = 0; i < taxed.len(); i++)
+	// Check tax possible
+	local total_leviable = 0
+	for (local i = 0; i < to_tax.len(); i++)
 	{
 		local company_to_tax = to_tax[i]
-		local levy = grant * (company_to_tax.q_value / taxables_tot_value)
-		if (!CanTax(taxed[i], levy))
+		company_to_tax.rh_levy <- grant * (company_to_tax.q_value / taxables_tot_value)
+		if (CanTax(company_to_tax, company_to_tax.rh_levy))
+			total_leviable += company_to_tax.rh_levy
+	}
+
+	if (pot_amount + grant - total_leviable > pot_overdraft_cap)
+	{
+		GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.RECUPERATION_TAX_RISE, 1 + (GSDate.GetMonth(GSDate.GetCurrentDate()) - 1) / 4), GSCompany.COMPANY_INVALID, GSNews.NR_NONE, 0)
+	}
+	else
+	{
+		GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.ROBIN_HOODED, company_name, grant), beneficiary.name, GSNews.NR_NONE, 0)
+		Pay(beneficiary, grant)
+	}
+
+	for (local i = 0; i < to_tax.len(); i++)
+	{
+		local company_to_tax = to_tax[i]
+		if (!CanTax(to_tax[i], company_to_tax.rh_levy))
 		{
-			loan_amount += levy
+			pot_amount += company_to_tax.rh_levy
 			continue
 		}
 
-		Tax(taxed[i], levy)
-		if (loan_amount > 0)
+		Tax(to_tax[i], levy)
+		if (pot_amount > 0)
 		{
-			local loan_recuperation_levy = Min(loan_amount, levy * loan_recuperation_rate)
-			if (CanTax(taxed[i], loan_recuperation_levy))
+			local pot_recuperation_levy = Min(pot_amount, levy * pot_recuperation_rate)
+			if (CanTax(to_tax[i], pot_recuperation_levy))
 			{
-				Tax(taxed[i], loan_recuperation_levy)
-				loan_amount -= loan_recuperation_levy
+				Tax(to_tax[i], pot_recuperation_levy)
+				pot_amount -= pot_recuperation_levy
 			}
 		}
 	}
@@ -379,7 +395,7 @@ function HmrcGS::CanTax(company, amount)
 	return amount + grace_epsilon <= company.balance - company.loaned
 
 function HmrcGS::ComputeSizeOfHoodToRob(beneficiary, companies)
-	return beneficiary.q_value * robin_hood_basic_rate
+	return beneficiary.q_value * robin_hood_basic_rate // Check this does not increase too much! Figure out a charge system for the top companies?
 
 function HmrcGS::IssueUBI(companies)
 {
@@ -395,7 +411,7 @@ function HmrcGS::IssueUBI(companies)
 
 		GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.POLL_ANNUITIED, poll_annuity), company.id, GSNews.NR_NONE, 0)
 		Pay(company, poll_annuity)
-		loan_amount += poll_annuity
+		pot_amount += poll_annuity
 	}
 }
 
