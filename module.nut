@@ -6,9 +6,9 @@ class ModuleCommander
 
 	function Save()
 	{
-		local ret = {};
-		for (local i = 0; i < ModuleCommander.modules.len(); i++)
-			ret[i] <- ModuleCommander.modules[i].Save();
+		local ret = [];
+		foreach (module in ModuleCommander.modules)
+			ret.append(module.Save());
 		return ret;
 	}
 
