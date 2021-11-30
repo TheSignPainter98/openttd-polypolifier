@@ -14,11 +14,11 @@ class ModuleCommander
 
 	function Load(version, data)
 	{
-		if (data.len() != modules.len())
+		if (data.len() != ModuleCommander.modules.len())
 			return;
 
-		for (local i = 0; i < modules.len(); i++)
-			modules[i].Load(version, data[i]);
+		for (local i = 0; i < ModuleCommander.modules.len(); i++)
+			ModuleCommander.modules[i].Load(version, data[i]);
 	}
 
 	function Execute(x, ...)
