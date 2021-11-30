@@ -26,10 +26,10 @@ class BanditTax extends Module
 		GSLog.Error("Issuing bandit tax");
 		foreach (company in companies.GetInfoList())
 			if (company.active && company.hq == GSMap.TILE_INVALID)
-				ExecuteTax(company);
+				Rob(company);
 	}
 
-	function ExecuteTax(company)
+	function Rob(company)
 	{
 		pot.Tax(company, Util.Max(bandit_tax_rate, bandit_tax_min))
 	}
