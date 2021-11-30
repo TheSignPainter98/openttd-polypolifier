@@ -86,7 +86,7 @@ class MultiGS extends GSController
 			local date = GSDate.GetCurrentDate();
 			local year = GSDate.GetYear(date);
 			local month = GSDate.GetMonth(date);
-			local quarter = 1 + (month - 1) / 4;
+			local quarter = 1 + (month - 1) / 3;
 
 			// Collect jobs to execute
 			local to_execute = [];
