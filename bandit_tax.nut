@@ -10,6 +10,7 @@ class BanditTax extends Module
 
 	constructor(pot, companies)
 	{
+		::Module.constructor();
 		this.pot = pot;
 		this.companies = companies;
 	}

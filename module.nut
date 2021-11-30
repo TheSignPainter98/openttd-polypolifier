@@ -1,20 +1,69 @@
 require("version.nut")
 
+class ModuleCommander
+{
+	modules = [];
+
+	function Save()
+	{
+		local ret = {};
+		for (local i = 0; i < ModuleCommander.modules.len(); i++)
+			ret[i] <- ModuleCommander.modules[i].Save();
+		return ret;
+	}
+
+	function Load(version, data)
+	{
+		if (data.len() != modules.len())
+			return;
+
+		for (local i = 0; i < modules.len(); i++)
+			modules[i].Load(version, data[i]);
+	}
+
+	function Execute(x, ...)
+	{
+		local start_tick = GetTick();
+		::print("Executing '" + x + "' with " + vargc + " args");
+		if (vargc)
+		{
+			local vargs = null;
+			if (vargc == 1)
+				vargs = vargv[0];
+			else
+			{
+				vargs = [];
+				for (local i = 0; i < vargc; i++)
+					vargs.append(vargv[i]);
+			}
+
+			foreach (module in ModuleCommander.modules)
+				if (x in module && module[x])
+					module[x](vargs);
+		}
+		else
+			foreach (module in ModuleCommander.modules)
+				if (x in module && module[x])
+					module[x]();
+
+		::print("Execution of '" + x + "' took " + (GetTick() - start_tick) + "t (" + ::ModuleCommander.modules.len() + " modules)");
+	}
+}
+
 class Module
 {
 	function Refresh();
 
-	event_handlers = null;
 	OnMonth = null;
 	OnQuarter = null;
 	OnEvent = null;
 
 	constructor()
 	{
-		event_handlers = {};
+		::ModuleCommander.modules.append(this);
 	}
 
-	function Save() {}
+	function Save() { }
 	function Load(version, data)
 	{
 		if (version != ::VERSION)

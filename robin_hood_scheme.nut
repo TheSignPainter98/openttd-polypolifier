@@ -10,6 +10,7 @@ class RobinHoodScheme extends Module
 
 	constructor(pot, companies)
 	{
+		::Module.constructor();
 		this.pot = pot;
 		this.company_list = companies;
 	}

@@ -1,5 +1,6 @@
 require("bandit_tax.nut")
 require("company_list.nut")
+require("module.nut")
 require("poll_annuity.nut")
 require("pot.nut")
 require("robin_hood_scheme.nut")
@@ -16,20 +17,14 @@ print <- GSLog.Error
 class MultiGS extends GSController
 {
 	DAY_TICKS = 74;
-	modules = null;
-	on_month = null;
-	on_quarter = null;
+
 	last_month = null;
 	last_quarter = null;
 	initial_month = null;
 	initial_year = null;
-	companies = null;
 
 	constructor()
 	{
-		modules = [];
-		on_month = [];
-		on_quarter = [];
 		last_month = null;
 		last_quarter = null;
 
@@ -37,82 +32,52 @@ class MultiGS extends GSController
 		initial_month = GSDate.GetMonth(date);
 		initial_year = GSDate.GetMonth(date);
 
-		companies = CompanyList();
-		modules.append(companies);
-
+		local companies = CompanyList();
 		local pot = Pot();
-		modules.append(pot);
 
-		// TODO: recuperation tax
-		modules.append(BanditTax(pot, companies));
-		modules.append(RobinHoodScheme(pot, companies));
-		modules.append(PollAnnuity(pot, companies));
+		// Welcome new companies
+		Welcomer(companies);
 
-		modules.append(Welcomer(companies));
+		// Declare taxes
+		BanditTax(pot, companies);
+		RobinHoodScheme(pot, companies);
+		PollAnnuity(pot, companies);
+		/* RecuperationTax(pot, companies); */
+
+		// Fix annoying rating changes.
+		RatingMedic();
+
+		GSLog.Error("Registered " + ::ModuleCommander.modules.len() + " modules");
 	}
 
 	function Save()
 	{
-		local ret = {};
-		for (local i = 0; i < modules.len(); i++)
-			ret[i] <- modules[i].Save();
-
-		ret.last_month <- last_month;
-		ret.last_quarter <- last_quarter;
-
-		return ret;
+		return {
+			last_month = last_month,
+			last_quarter = last_quarter,
+			modules = ::ModuleCommander.Save(),
+		}
 	}
 
 	function Load(version, data)
 	{
-		if (data.len() != modules.len())
-			return;
-
-		for (local i = 0; i < modules.len(); i++)
-			modules[i].Load(version, data[i]);
-
 		last_month = data.last_month;
 		last_quarter = data.last_quarter;
-	}
-
-	function ModExecute(x, ...)
-	{
-		print("Executing '" + x + "' with " + vargc + " args");
-		if (vargc)
-		{
-			local vargs = null;
-			if (vargc == 1)
-				vargs = vargv[0];
-			else
-			{
-				vargs = [];
-				for (local i = 0; i < vargc; i++)
-					vargs.append(vargv[i]);
-			}
-
-			foreach (module in modules)
-				if (x in module && module[x])
-					module[x](vargs);
-		}
-		else
-			foreach (module in modules)
-				if (x in module && module[x])
-					module[x]();
+		::ModuleCommander.Load(version, data.modules);
 	}
 
 	function Start()
 	{
 		Sleep(1); // Avoid initialisation bugs
 		local first = true;
+		::ModuleCommander.Execute("PostInit");
+		local post_init_ticks = GetTick();
 
 		while (true)
 		{
 			local iter_start_tick = GetTick();
 			if (first)
-			{
-				iter_start_tick--; // Re-align after skipping the first tick
-				first = false;
-			}
+				iter_start_tick -= 1 + post_init_ticks; // Re-align after skipping the first tick
 
 			HandleEvents();
 
@@ -124,21 +89,27 @@ class MultiGS extends GSController
 
 			// Collect jobs to execute
 			local to_execute = [];
-			if (last_month != month)
-				to_execute.append(ModuleJob("OnMonth", month, year));
-			if (last_quarter != quarter)
-				to_execute.append(ModuleJob("OnQuarter", quarter, year));
+			if (!first) // Skip the first month for the sake of long-initialisation.
+			{
+				if (last_month != month)
+					to_execute.append(ModuleJob("OnMonth", month, year));
+				if (last_quarter != quarter)
+					to_execute.append(ModuleJob("OnQuarter", quarter, year));
+			}
 
 			// Execute the jobs
 			if (to_execute.len())
 			{
-				ModExecute("Refresh");
+				::ModuleCommander.Execute("Refresh");
 				foreach (job in to_execute)
-					ModExecute(job.name, job.args);
+					::ModuleCommander.Execute(job.name, job.args);
 			}
 
 			last_month = month;
 			last_quarter = quarter;
+
+			if (first)
+				first = false;
 
 			local ticks_taken = iter_start_tick - GetTick();
 			local wait = DAY_TICKS - ticks_taken;
@@ -156,7 +127,7 @@ class MultiGS extends GSController
 
 			local et = ev.GetEventType();
 
-			ModExecute("OnEvent", et, ev);
+			::ModuleCommander.Execute("OnEvent", et, ev);
 		}
 	}
 

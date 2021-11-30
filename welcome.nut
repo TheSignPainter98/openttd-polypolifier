@@ -8,6 +8,7 @@ class Welcomer extends Module
 
 	constructor(companies)
 	{
+		::Module.constructor();
 		welcomed_ids = [];
 		this.companies = companies;
 	}
