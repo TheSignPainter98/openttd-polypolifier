@@ -55,7 +55,7 @@ SELF_SETTINGS <- [
 		flags = GSInfo.CONFIG_INGAME
 	}
 	{
-		name = BOE_POT_RATE
+		name = POT_RATE
 		description = "The overdraft interest rate of the pot (%)"
 		min_value = 0
 		max_value = 30
@@ -68,7 +68,7 @@ SELF_SETTINGS <- [
 		flags = GSInfo.CONFIG_INGAME
 	}
 	{
-		name = BOE_POT_RECUPERATION_RATE
+		name = POT_RECUPERATION_RATE
 		description = "The increase in the robin hood levy used to reduce overdraft in the pot (%) "
 		min_value = 0
 		max_value = 100
@@ -81,7 +81,7 @@ SELF_SETTINGS <- [
 		flags = GSInfo.CONFIG_INGAME
 	}
 	{
-		name = BOE_POT_CAP
+		name = POT_CAP
 		description = "The upper limit on the amount of money which the government can store"
 		min_value = 0
 		max_value = 20000000
@@ -94,7 +94,7 @@ SELF_SETTINGS <- [
 		flags = GSInfo.CONFIG_INGAME
 	}
 	{
-		name = BOE_POT_OVERDRAFT_CAP
+		name = POT_OVERDRAFT_CAP
 		description = "The limit on the overdraft available to the government"
 		min_value = 100000
 		max_value = 10000000
@@ -119,17 +119,31 @@ SELF_SETTINGS <- [
 		step_size = 10000
 		flags = GSInfo.CONFIG_INGAME
 	}
+	{
+		name = WELCOME_DELAY
+		description = "How many months after joining a player is welcomed"
+		min_value = 0
+		max_value = 24
+		easy_value = 3
+		medium_value = 3
+		hard_value = 3
+		custom_value = 3
+		random_deviation = 0
+		step_size = 1
+		flags = GSInfo.CONFIG_INGAME
+	}
+	// TODO: add initial delay / start date
 ]
 
-class HmrcGSInfo extends GSInfo
+class GovGSInfo extends GSInfo
 {
 	function GetAuthor() { return "kcza"; }
-	function GetName() { return "Her Majesty's Revenue and Customs"; }
+	function GetName() { return "Her Majesty's Government"; }
 	function GetDescription() { return "A socialist balancer to encourage polypolies"; }
 	function GetVersion() { return VERSION; }
 	function GetDate() { return "1900-01-01"; }
-	function CreateInstance() { return "HmrcGS"; }
-	function GetShortName() { return "HMRC"; }
+	function CreateInstance() { return "MultiGS"; }
+	function GetShortName() { return "GVMT"; }
 	function GetAPIVersion() { return "1.9"; }
 	function GetSettings()
 		for (local i = 0; i < SELF_SETTINGS.len(); i++)
@@ -147,4 +161,4 @@ class HmrcGSInfo extends GSInfo
 		}
 }
 
-RegisterGS(HmrcGSInfo());
+RegisterGS(GovGSInfo());

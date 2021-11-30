@@ -4,4 +4,4 @@ ROBIN_HOODED			:SNOWFLAKE LIBERALS AT IT AGAIN! {COMPANY} selected by the govern
 POLL_ANNUITIED			:BRITAIN TAKES BACK CONTROL OF HER FINANCES! Government announces stimulus package of £{NUM} for all UK and ROI transport companies
 POLL_ANNUITY_MISSED		:As transport companies around the UK and ROI take their £{NUM} poll annuity, questions are asked why {COMPANY} hasn't moved their HQ to the British Isles
 RH_CANNOT_OPERATE		:Westminster panic as Gov. study shows only {NUM} in {NUM} companies take up new Robin Hood tax benefit scheme for UK&ROI-based companies
-RECUPERATION_TAX_RISE	:Government out of money! Tax rate for Q{NUM} temporarily increased for top 50% of companies to help clear Treasury log jam
+CANNOT_RH_GRANT_NO_CASH	:Government out of money! Robin Hood tax payout cancelled for Q{NUM} to help clear Treasury log jam
