@@ -92,7 +92,7 @@ class CompanyList extends Module
 		local y2 = GSDate.GetYear(d2);
 		local m1 = GSDate.GetMonth(d1);
 		local m2 = GSDate.GetMonth(d2);
-		return m2 - m1 + 12 * (y2 - y1);
+		return m1 - m2 + 12 * (y1 - y2);
 	}
 
 	function OnEvent(args)
