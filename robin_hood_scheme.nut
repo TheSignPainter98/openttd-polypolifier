@@ -47,16 +47,7 @@ class RobinHoodScheme extends Module
 
 		if (!beneficiary)
 		{
-			local active_companies = 0;
-			local built_hqs = 0;
-			foreach (company in companies)
-				if (company.active)
-				{
-					active_companies++;
-					if (company.hq != GSMap.TILE_INVALID)
-						built_hqs++;
-				}
-			GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.RH_CANNOT_OPERATE, built_hqs, active_companies), GSCompany.COMPANY_INVALID, GSNews.NR_NONE, 0);
+			GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.RH_CANNOT_OPERATE), GSCompany.COMPANY_INVALID, GSNews.NR_NONE, 0);
 			return;
 		}
 
@@ -83,9 +74,7 @@ class RobinHoodScheme extends Module
 
 		// Attempt to pay RH grant
 		if (pot.Grant(beneficiary, grant))
-		{
-			GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.ROBIN_HOODED, company_name, grant), beneficiary.name, GSNews.NR_NONE, 0);
-		}
+			GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.ROBIN_HOODED, beneficiary.id, grant), beneficiary.name, GSNews.NR_NONE, 0);
 		else
 			GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.CANNOT_RH_GRANT_NO_CASH, 1 + (GSDate.GetMonth(GSDate.GetCurrentDate()) - 1) / 4), GSCompany.COMPANY_INVALID, GSNews.NR_NONE, 0);
 	}

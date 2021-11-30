@@ -33,12 +33,13 @@ class Welcomer extends Module
 	{
 		GSLog.Error("Sending welcome messages");
 		foreach (company in companies.GetInfoList())
-		{
-			if (!Util.In(welcomed_ids, company.id) && company.age_months > welcome_delay_months)
+			if (company.age_months > welcome_delay_months)
+			{
 				if (company.hq == GSMap.TILE_INVALID)
-					GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.ANNOUNCEMENT_NO_HQ, company.id + 1), company.id, GSNews.NR_NONE, 0);
-				else
-					GSNews.Create(GSNews.NT_GENERAL, ANNOUNCEMENT_HQ, company.id, GSNews.NR_NONE, company.hq);
-		}
+					GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.NO_HQ_REMINDER, company.id + 1), company.id, GSNews.NR_NONE, 0);
+				else if (!Util.In(welcomed_ids, company.id))
+					GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.WELCOME_FIRST, company.id), company.id, GSNews.NR_NONE, company.hq);
+				welcomed_ids.append(company.id);
+			}
 	}
 }

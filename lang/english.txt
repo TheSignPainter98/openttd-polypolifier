@@ -1,7 +1,7 @@
-ANNOUNCEMENT_NO_HQ		:FREE MONEY BONANZA! Government announces tax breaks and new stimulus scheme for all companies headquartered in the UK and ROI. Commuters shocked and appalled to learn that Company {COMPANY} does not have its HQ in the UK/ROI, and hence will not benefit
-ANNOUNCEMENT_HQ			:\"It's the nanny-state gone mad\" says Farage. Government announces tax breaks and new stimulus scheme for all companies headquartered in the UK and ROI.
-ROBIN_HOODED			:SNOWFLAKE LIBERALS AT IT AGAIN! {COMPANY} selected by the government to receive a stimulus grant of £
-POLL_ANNUITIED			:BRITAIN TAKES BACK CONTROL OF HER FINANCES! Government announces stimulus package of £{NUM} for all UK and ROI transport companies
-POLL_ANNUITY_MISSED		:As transport companies around the UK and ROI take their £{NUM} poll annuity, questions are asked why {COMPANY} hasn't moved their HQ to the British Isles
-RH_CANNOT_OPERATE		:Westminster panic as Gov. study shows only {NUM} in {NUM} companies take up new Robin Hood tax benefit scheme for UK&ROI-based companies
 CANNOT_RH_GRANT_NO_CASH	:Government out of money! Robin Hood tax payout cancelled for Q{NUM} to help clear Treasury log jam
+POLL_ANNUITIED			:Government announces stimulus package of £{NUM} for all UK and ROI transport companies
+POLL_ANNUITY_MISSED		:As transport companies around the UK and ROI take their £{NUM} poll annuity, questions are asked why {COMPANY} hasn't moved their HQ to the British Isles
+RH_CANNOT_OPERATE		:Westminster panic as Gov. study shows only no companies eligible for Robin Hood tax benefit scheme for UK-based companies
+ROBIN_HOODED			:{COMPANY} selected by the government to receive a stimulus grant of £{NUM}
+WELCOME_FIRST			:Government announces tax breaks and new stimulus scheme for all companies headquartered in the UK and ROI. CEO of {COMPANY} to be congratulated on ability to read fine print.
+NO_HQ_REMINDER			:FREE MONEY BONANZA! Government announces tax breaks and new stimulus scheme for all companies headquartered in the UK and ROI. Commuters shocked and appalled to learn that Company {NUM} does not have its HQ in the UK/ROI, and hence will not benefit
