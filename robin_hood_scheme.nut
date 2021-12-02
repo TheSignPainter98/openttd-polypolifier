@@ -1,3 +1,4 @@
+require("locations.nut")
 require("module.nut")
 require("setting_names.nut")
 require("util.nut")
@@ -47,7 +48,7 @@ class RobinHoodScheme extends Module
 
 		if (!beneficiary)
 		{
-			GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.RH_CANNOT_OPERATE), GSCompany.COMPANY_INVALID, GSNews.NR_NONE, 0);
+			GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.RH_CANNOT_OPERATE), GSCompany.COMPANY_INVALID, Locs.NR_CAPITAL, Locs.CAPITAL);
 			return;
 		}
 
@@ -74,9 +75,9 @@ class RobinHoodScheme extends Module
 
 		// Attempt to pay RH grant
 		if (pot.Grant(beneficiary, grant))
-			GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.ROBIN_HOODED, beneficiary.id, grant), beneficiary.name, GSNews.NR_NONE, 0);
+			GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.ROBIN_HOODED, beneficiary.id, grant), beneficiary.name, GSNews.NR_TILE, beneficiary.hq);
 		else
-			GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.CANNOT_RH_GRANT_NO_CASH, 1 + (GSDate.GetMonth(GSDate.GetCurrentDate()) - 1) / 4), GSCompany.COMPANY_INVALID, GSNews.NR_NONE, 0);
+			GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.CANNOT_RH_GRANT_NO_CASH, 1 + (GSDate.GetMonth(GSDate.GetCurrentDate()) - 1) / 4), GSCompany.COMPANY_INVALID, Locs.NR_CAPITAL, Locs.CAPITAL);
 	}
 
 	function ComputeGrant(beneficiary, companies)

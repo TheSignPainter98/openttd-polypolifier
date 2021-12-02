@@ -1,4 +1,5 @@
 require("module.nut")
+require("locations.nut")
 
 class Welcomer extends Module
 {
@@ -36,9 +37,9 @@ class Welcomer extends Module
 			if (company.age_months > welcome_delay_months)
 			{
 				if (company.hq == GSMap.TILE_INVALID)
-					GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.NO_HQ_REMINDER, company.id + 1), company.id, GSNews.NR_NONE, 0);
+					GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.NO_HQ_REMINDER, company.id + 1), company.id, Locs.NR_CAPITAL, Locs.CAPITAL);
 				else if (!Util.In(welcomed_ids, company.id))
-					GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.WELCOME_FIRST, company.id), company.id, GSNews.NR_NONE, company.hq);
+					GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.WELCOME_FIRST, company.id), company.id, GSNews.NR_TILE, company.hq);
 				welcomed_ids.append(company.id);
 			}
 	}
