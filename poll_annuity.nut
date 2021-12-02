@@ -49,7 +49,7 @@ class PollAnnuity extends Module
 			// Don't pay non-resident companies
 			if (company.hq == GSMap.TILE_INVALID)
 			{
-				GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.POLL_ANNUITY_MISSED, poll_annuity, company.id), company.id, Locs.NR_CAPITAL, Locs.CAPITAL);
+				GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.POLL_ANNUITY_MISSED, poll_annuity, company.id, company.id), company.id, Locs.NR_CAPITAL, Locs.CAPITAL);
 				continue;
 			}
 

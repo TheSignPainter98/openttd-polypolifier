@@ -21,9 +21,10 @@ class RobinHoodScheme extends Module
 		robin_hood_basic_rate = GetSetting(::ROBIN_HOOD_RATE);
 	}
 
-	function OnQuarter(...)
+	function OnQuarter(args)
 	{
 		GSLog.Error("Executing Robin Hood scheme");
+		local quarter = args[0];
 
 		local companies = company_list.GetInfoList();
 
@@ -77,7 +78,7 @@ class RobinHoodScheme extends Module
 		if (pot.Grant(beneficiary, grant))
 			GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.ROBIN_HOODED, beneficiary.id, grant), beneficiary.name, GSNews.NR_TILE, beneficiary.hq);
 		else
-			GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.CANNOT_RH_GRANT_NO_CASH, 1 + (GSDate.GetMonth(GSDate.GetCurrentDate()) - 1) / 4), GSCompany.COMPANY_INVALID, Locs.NR_CAPITAL, Locs.CAPITAL);
+			GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.CANNOT_RH_GRANT_NO_CASH, quarter), GSCompany.COMPANY_INVALID, Locs.NR_CAPITAL, Locs.CAPITAL);
 	}
 
 	function ComputeGrant(beneficiary, companies)
