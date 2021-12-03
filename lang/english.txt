@@ -4,7 +4,7 @@ POLL_ANNUITY_MISSED		:As other transport companies across the British Isles get 
 RH_CANNOT_OPERATE		:Westminster panic as Gov. study shows no companies eligible for Robin Hood tax benefit scheme for UK-based companies
 ROBIN_HOODED			:{COMPANY} selected by the government to receive a stimulus grant of {CURRENCY_LONG}
 WELCOME_FIRST			:Government announces tax breaks and new stimulus scheme for all companies headquartered in the British Isles. CEO of {COMPANY}, {PRESIDENT_NAME}, to be congratulated on ability to read fine print.
-NO_HQ_REMINDER			:FREE MONEY BONANZA! Government announces tax breaks and new stimulus scheme for all companies headquartered in the UK and ROI. Consumers shocked and appalled to learn that Company {COMPANY_NUM} does not have its HQ in the British Isles, and hence will not benefit.
+NO_HQ_REMINDER			:FREE MONEY BONANZA! Government announces tax breaks and new stimulus scheme for all companies headquartered in the UK and ROI. Consumers shocked and appalled to learn that {COMPANY} {COMPANY_NUM} does not have its HQ in the British Isles, and hence will not benefit.
 
 # {"NORMAL_FONT",       EmitSingleChar, SCC_NORMALFONT,         0, -1, C_NONE},
 # {"TINY_FONT",         EmitSingleChar, SCC_TINYFONT,           0, -1, C_NONE},
