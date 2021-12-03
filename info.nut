@@ -124,10 +124,10 @@ SELF_SETTINGS <- [
 		description = "How many months after joining a player is welcomed"
 		min_value = 0
 		max_value = 24
-		easy_value = 3
-		medium_value = 3
-		hard_value = 3
-		custom_value = 3
+		easy_value = 2
+		medium_value = 2
+		hard_value = 2
+		custom_value = 2
 		random_deviation = 0
 		step_size = 1
 		flags = GSInfo.CONFIG_INGAME

@@ -21,7 +21,7 @@ class BanditTax extends Module
 		bandit_tax_min = GetPercentageSetting(::BANDIT_TAX_MIN);
 	}
 
-	function OnQuarter(args)
+	function OnQuarter(_)
 	{
 		GSLog.Error("Issuing bandit tax");
 		foreach (company in companies.GetInfoList())
