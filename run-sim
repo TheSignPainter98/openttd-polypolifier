@@ -1,0 +1,53 @@
+#!/bin/bash
+
+set -e
+
+function compile()
+{
+	[[ $1 -ot ${1%.moon}.lua ]] && return
+	moonc -l $1
+	moonc $1 2>/dev/null
+}
+
+function run_gnuplot()
+{
+	gnuplot -e "interact=$interactive" -c sims/profit.plt
+}
+
+function run_sims()
+{
+	moon ./sims/sim.moon $@
+	if [[ $help_output -eq 0 ]]; then
+		exit 0
+	fi
+}
+
+interactive=0
+help_output=0
+for arg in $@; do
+	case $arg in
+		-i|--interactive)
+			interactive=1
+			;;
+		-h|--help)
+			help_output=1
+			;;
+	esac
+done
+
+for file in $(find . -name '*.moon'); do
+	compile $file
+done
+
+[[ ! -d data/ ]] && mkdir data/
+[[ "$(ls -A data/)" ]] && rm data/*.csv
+
+trap "trap - SIGTERM SIGINT && kill -- -$$" SIGINT SIGTERM
+
+if [[ $interactive -ne 0 ]]; then
+	run_gnuplot &
+	run_sims $@
+else
+	run_sims $@
+	run_gnuplot
+fi
