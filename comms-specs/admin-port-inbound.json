@@ -1,0 +1,31 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://example.com/product.schema.json",
+	"title": "GovGS server communications",
+	"description": "List of valid messages which may be received from the admin port",
+	"type": "object",
+	"properties": {
+		"action": {
+			"type": "string",
+			"description": "The action which this message represents"
+		}
+	},
+	"anyOf": [
+		{
+			"properties": {
+				"action": {
+					"const": "fine"
+				},
+				"company_id": {
+					"type": "integer",
+					"description": "The ID of the company to fine"
+				},
+				"amount": {
+					"type": "integer",
+					"description": "The amount of money to deduct from the specified company"
+				}
+			}
+		}
+	],
+	"required": [ "action" ]
+}

@@ -1,6 +1,7 @@
 require("agency_tax.nut")
 require("bandit_tax.nut")
 require("company_list.nut")
+require("fine.nut")
 require("module.nut")
 require("poll_annuity.nut")
 require("pot.nut")
@@ -39,6 +40,9 @@ class MultiGS extends GSController
 
 		// Welcome new companies
 		Welcomer(companies);
+
+		// Create fine handler (for mods)
+		FineExecutor(companies);
 
 		// Declare taxes
 		BanditTax(pot, companies);

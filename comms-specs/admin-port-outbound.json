@@ -1,0 +1,36 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://example.com/product.schema.json",
+	"title": "GovGS server communications",
+	"description": "List of valid messages which may be sent to the admin port, messages emitted cannot be longer than 1450 bytes due to openttd technical limitations",
+	"type": "object",
+	"properties": {
+		"action": {
+			"type": "string",
+			"description": "The action which this message represents"
+		}
+	},
+	"anyOf": [
+		{
+			"properties": {
+				"action": { "const": "response" },
+				"error": {
+					"type": "boolean",
+					"description": "Whether an error occurred"
+				}
+			},
+			"if": { "properties": { "error": { "const": true } } },
+			"then": {
+				"properties": {
+					"reason": {
+						"type": "string",
+						"description": "The reason the error occurred"
+					}
+				},
+				"required": [ "reason" ]
+			},
+			"required": [ "error" ]
+		}
+	],
+	"required": [ "action" ]
+}
