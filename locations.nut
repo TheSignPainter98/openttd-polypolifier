@@ -1,11 +1,14 @@
 require("module.nut")
 
+NO_CAPITAL_FOUND <- -1;
+
 class Locations extends Module
 {
 	CAPITAL_NAME = "London";
 
 	NR_CAPITAL = GSNews.NR_NONE;
-	CAPITAL = -1;
+	CAPITAL = NO_CAPITAL_FOUND;
+	CAPITAL_IDX = NO_CAPITAL_FOUND;
 
 	function PostInit()
 	{
@@ -18,7 +21,8 @@ class Locations extends Module
 			if (GSTown.GetName(town) == CAPITAL_NAME)
 			{
 				NR_CAPITAL = GSNews.NR_TOWN;
-				CAPITAL = town;
+				CAPITAL_IDX = town;
+				CAPITAL = GSTown.GetLocation(town);
 				break;
 			}
 	}

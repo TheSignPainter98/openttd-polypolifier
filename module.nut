@@ -24,7 +24,8 @@ class ModuleCommander
 	function Execute(x, ...)
 	{
 		local start_tick = GetTick();
-		::print("Executing '" + x + "' with " + vargc + " args");
+		GSLog.Error("Executing '" + x + "' with " + vargc + " args");
+		local processed = 0;
 		if (vargc)
 		{
 			local vargs = null;
@@ -39,14 +40,20 @@ class ModuleCommander
 
 			foreach (module in ModuleCommander.modules)
 				if (x in module && module[x])
+				{
 					module[x](vargs);
+					processed++;
+				}
 		}
 		else
 			foreach (module in ModuleCommander.modules)
 				if (x in module && module[x])
+				{
 					module[x]();
+					processed++;
+				}
 
-		::print("Execution of '" + x + "' took " + (GetTick() - start_tick) + "t (" + ::ModuleCommander.modules.len() + " modules)");
+		GSLog.Error("Execution of '" + x + "' took " + (GetTick() - start_tick) + "t (" + processed + "/" + ::ModuleCommander.modules.len() + " modules)");
 	}
 }
 
@@ -56,6 +63,7 @@ class Module
 
 	OnMonth = null;
 	OnQuarter = null;
+	OnYear = null;
 	OnEvent = null;
 
 	constructor()
@@ -97,8 +105,8 @@ class Module
 	{
 		return {
 			year = GSDate.GetYear(date),
-			month = GSDate.GetMonth(date),
-			day = GSDate.GetDayOfMonth(date),
+				 month = GSDate.GetMonth(date),
+				 day = GSDate.GetDayOfMonth(date),
 		};
 	}
 

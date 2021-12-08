@@ -6,23 +6,24 @@ class CompanyList extends Module
 	company_ids = null;
 	join_dates = null;
 	companies = null;
+	activity_data = null;
+	prev_activity_data = null;
 
 	constructor()
 	{
 		::Module.constructor();
 		company_ids = [];
-		join_dates = [];
+		join_dates = {};
+		activity_data = null;
+		prev_activity_data = null;
 	}
-
 
 	function Save()
 	{
-		local packed_join_dates = [];
-		foreach (date in join_dates)
-			packed_join_dates.append(SaveDate(date))
 		return {
-			company_ids = company_ids,
-			join_dates = packed_join_dates,
+			company_ids = company_ids
+				join_dates = join_dates
+				prev_activity_data = prev_activity_data
 		}
 	}
 
@@ -30,17 +31,31 @@ class CompanyList extends Module
 	{
 		parent.Load(version, data);
 		company_ids = data.company_ids;
-		join_dates = []
-		foreach (date in data.join_dates)
-			join_dates.append(LoadDate(date))
+		prev_activity_data = data.prev_activity_data;
+		join_dates = data.join_dates;
 	}
 
 	function Refresh()
 	{
-		companies = []
+		if (!activity_data)
+			UpdateActivityData();
+
+		companies = [];
 		local n_companies = company_ids.len();
 		for (local i = 0; i < n_companies; i++)
-			companies.append(GetCompanyInfo(company_ids[i], join_dates[i]))
+			companies.append(GetCompanyInfo(company_ids[i], join_dates[company_ids[i]]))
+	}
+
+	function OnYear(_)
+	{
+		UpdateActivityData();
+	}
+
+	function UpdateActivityData()
+	{
+		GSLog.Error("Updating activity data");
+		prev_activity_data = activity_data;
+		activity_data = GetActivityData();
 	}
 
 	function GetInfoList()
@@ -57,26 +72,22 @@ class CompanyList extends Module
 			name = GSCompany.GetName(id),
 			hq = GSCompany.GetCompanyHQ(id),
 			balance = GSCompany.GetBankBalance(id),
-			q_income = GSCompany.GetQuarterlyIncome(id, GSCompany.CURRENT_QUARTER),
-			q_value = GSCompany.GetQuarterlyCompanyValue(id, GSCompany.CURRENT_QUARTER), // TODO: this doesn't actually work get the value it just returns 1?!
-			q_expenses = GSCompany.GetQuarterlyExpenses(id, GSCompany.CURRENT_QUARTER),
-			q_cargo = GSCompany.GetQuarterlyCargoDelivered(id, GSCompany.CURRENT_QUARTER),
+			value = GSCompany.GetQuarterlyCompanyValue(id, GSCompany.CURRENT_QUARTER),
 			join_date = join_date,
 			age_months = DiffMonths(GSDate.GetCurrentDate(), join_date),
-			active = true, // TODO: implement some activity checker
+			active = IsActive(id),
 		}
-
-		company.q_value_delta <- company.q_value - GSCompany.GetQuarterlyCompanyValue(id, GSCompany.CURRENT_QUARTER - 1);
 
 		local q_perf = GSCompany.GetQuarterlyPerformanceRating(id, GSCompany.CURRENT_QUARTER);
 		company.q_perf <- q_perf == -1 ? 0 : q_perf;
 
-		local GetImpureAttributes = function (id, company){
+		{
 			local _ = GSCompanyMode(id);
 			company.loaned <- GSCompany.GetLoanAmount();
 			company.max_loan <- GSCompany.GetMaxLoanAmount();
 		}
-		GetImpureAttributes(id, company);
+
+		company.profit <- company.balance - company.loaned;
 
 		GSLog.Error("<<<");
 		foreach (k,v in company)
@@ -93,6 +104,55 @@ class CompanyList extends Module
 		local m1 = GSDate.GetMonth(d1);
 		local m2 = GSDate.GetMonth(d2);
 		return m1 - m2 + 12 * (y1 - y2);
+	}
+
+	function IsActive(id)
+	{
+		if (!prev_activity_data)
+			return false;
+		if (!(id in prev_activity_data))
+			return false;
+
+		local curr_data = activity_data[id];
+		local prev_data = prev_activity_data[id];
+		foreach (k,_ in prev_data)
+		{
+			GSLog.Error("Checking " + k + ": " + prev_data[k] + " == " + curr_data[k] + "?");
+			if (prev_data[k] < curr_data[k])
+				return true;
+		}
+
+		return false;
+	}
+
+	function GetActivityData()
+	{
+		local data = {};
+
+		foreach (id in company_ids)
+		{
+			local _ = GSCompanyMode(id);
+			local d = {
+				infrastructure = 0,
+				vehicles = 0,
+			};
+			foreach (itype in ["RAIL", "SIGNALS", "ROAD", "CANAL", "STATION", "AIRPORT"])
+				d.infrastructure += GSInfrastructure.GetInfrastructurePieceCount(id, GSInfrastructure["INFRASTRUCTURE_" + itype]);
+			data[id] <- d;
+		}
+
+		foreach (id in company_ids) // TODO: does this need to loop like this? how does the vehicle iteration work?
+		{
+			local _ = GSCompanyMode(id);
+			GSLog.Error("Vehicle list has length " + GSVehicleList().Count());
+			foreach (vehicle in GSVehicleList())
+			{
+				GSLog.Error("Vehicle " + vehicle + " has owner " + GSVehicle.GetOwner(vehicle));
+				data[GSVehicle.GetOwner(vehicle)].vehicles++;
+			}
+		}
+
+		return data;
 	}
 
 	function OnEvent(args)
@@ -116,8 +176,9 @@ class CompanyList extends Module
 	function OnCompanyNew(ev)
 	{
 		ev = ::GSEventCompanyNew.Convert(ev);
-		company_ids.append(ev.GetCompanyID());
-		join_dates.append(GSDate.GetCurrentDate());
+		local id = ev.GetCompanyID();
+		company_ids.append(id);
+		join_dates[id] <- GSDate.GetCurrentDate();
 	}
 
 	function OnCompanyMerger(ev)
@@ -134,8 +195,8 @@ class CompanyList extends Module
 
 	function Forget(id)
 	{
-		local idx = Util.Find(company_ids, ev.GetOldCompanyID());
+		local idx = Util.Find(company_ids, id);
 		company_ids.remove(idx);
-		join_dates.remove(idx);
+		delete join_dates[idx];
 	}
 }

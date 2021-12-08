@@ -31,6 +31,6 @@ class BanditTax extends Module
 
 	function Rob(company)
 	{
-		pot.Tax(company, Util.Max(bandit_tax_rate, bandit_tax_min))
+		pot.Tax(company, Util.Max(bandit_tax_rate * company.value, bandit_tax_min))
 	}
 }

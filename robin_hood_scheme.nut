@@ -40,7 +40,7 @@ class RobinHoodScheme extends Module
 
 		foreach (company in companies)
 			company.rh_priority <- Priority(company);
-		comp_info.sort(PriorityCompare);
+		companies.sort(PriorityCompare);
 
 		local beneficiary = null;
 		for (local i = 0; i < n_irrelevant_companies; i++)
@@ -83,7 +83,11 @@ class RobinHoodScheme extends Module
 
 	function ComputeGrant(beneficiary, companies)
 	{
-		return beneficiary.q_value * robin_hood_basic_rate;
+		// Assumes that companies is sorted by RH priority
+		return Util.Min(
+				robin_hood_basic_rate * beneficiary.value,
+				robin_hood_basic_rate * (companies[companies.len() / 2].value - beneficiary.value)
+				);
 	}
 
 	function PriorityCompare(a, b)
@@ -93,6 +97,6 @@ class RobinHoodScheme extends Module
 
 	function Priority(company)
 	{
-		return -(company.q_value + company.balance - company.loaned);
+		return -company.value;
 	}
 }

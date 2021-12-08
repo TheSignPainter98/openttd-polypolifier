@@ -1,3 +1,4 @@
+require("agency_tax.nut")
 require("bandit_tax.nut")
 require("company_list.nut")
 require("module.nut")
@@ -13,14 +14,13 @@ HmrcGS <- {}
 
 // Bandit tax rate must always be HIGHER than the robin hood tax rate to ensure players submit to the scheme
 
-print <- GSLog.Error
-
 class MultiGS extends GSController
 {
 	DAY_TICKS = 74;
 
 	last_month = null;
 	last_quarter = null;
+	last_year = null;
 	initial_month = null;
 	initial_year = null;
 
@@ -28,6 +28,7 @@ class MultiGS extends GSController
 	{
 		last_month = null;
 		last_quarter = null;
+		last_year = null;
 
 		local date = GSDate.GetCurrentDate();
 		initial_month = GSDate.GetMonth(date);
@@ -43,7 +44,7 @@ class MultiGS extends GSController
 		BanditTax(pot, companies);
 		RobinHoodScheme(pot, companies);
 		PollAnnuity(pot, companies);
-		/* RecuperationTax(pot, companies); */
+		AgencyTax(pot, companies);
 
 		// Fix annoying rating changes.
 		RatingMedic();
@@ -96,6 +97,8 @@ class MultiGS extends GSController
 					to_execute.append(ModuleJob("OnMonth", month, year));
 				if (last_quarter != quarter)
 					to_execute.append(ModuleJob("OnQuarter", quarter, year));
+				if (last_year != year)
+					to_execute.append(ModuleJob("OnYear", year));
 			}
 
 			// Execute the jobs
@@ -108,12 +111,16 @@ class MultiGS extends GSController
 
 			last_month = month;
 			last_quarter = quarter;
+			last_year = year;
 
 			if (first)
 				first = false;
 
+			// Wait until the start of the next day.
 			local ticks_taken = iter_start_tick - GetTick();
-			local wait = DAY_TICKS - ticks_taken;
+			local wait = (DAY_TICKS - ticks_taken) % DAY_TICKS;
+			if (wait < 0)
+				wait += DAY_TICKS;
 			Sleep(wait);
 		}
 	}
@@ -123,11 +130,10 @@ class MultiGS extends GSController
 		while(GSEventController.IsEventWaiting())
 		{
 			local ev = GSEventController.GetNextEvent();
-			if(ev == null)
+			if (ev == null)
 				return;
 
 			local et = ev.GetEventType();
-
 			::ModuleCommander.Execute("OnEvent", et, ev);
 		}
 	}
