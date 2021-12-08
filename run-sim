@@ -17,7 +17,7 @@ function run_gnuplot()
 function run_sims()
 {
 	moon ./sims/sim.moon $@
-	if [[ $help_output -eq 0 ]]; then
+	if [[ $help_output -ne 0 ]]; then
 		exit 0
 	fi
 }
@@ -42,8 +42,6 @@ done
 [[ ! -d data/ ]] && mkdir data/
 [[ "$(ls -A data/)" ]] && rm data/*.csv
 
-trap "trap - SIGTERM SIGINT && kill -- -$$" SIGINT SIGTERM
-
 if [[ $interactive -ne 0 ]]; then
 	run_gnuplot &
 	run_sims $@
@@ -51,3 +49,5 @@ else
 	run_sims $@
 	run_gnuplot
 fi
+
+trap "trap - SIGTERM SIGINT && kill -- -$$" SIGINT SIGTERM
