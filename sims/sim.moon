@@ -3,29 +3,16 @@
 import open, stderr from io
 import concat, insert from table
 import randomseed from math
+import args from require 'sims.args'
 import debug from require 'sims.log'
-import Afk, InteractivePlayer, NormalPlayer from require 'sims.companies'
+import Afk, Zombie, Delayed, Flakey, Interactive, Addict from require 'sims.companies'
 import Gov from require 'sims.gov'
 import pexists from require 'sims.util'
 
 DATA_DIR = 'data'
 
--- Parse args
-arg_parser = with (require 'argparse')!
-	\name 'run-sim'
-	\description 'Simulation for the government GS tax measures'
-	with \option '-s --seed'
-		\description 'The random seed used for each simulation'
-		\default 0
-	with \option '-d --duration'
-		\description 'The duration of the simulation in years'
-		\default 25
-	with \flag '-i --interactive'
-		\description 'Add an interactive simulation'
-	\add_complete!
-args = arg_parser\parse!
-
 names = { 'RED', 'BLU', 'Xyferries', 'kczaRide', 'Bucket-Bus', 'ChomanderCorp.', 'LegitTrains', 'Sugondese' }
+names = { 'Xyferries', 'kczaRide', 'Bucket-Bus', 'ChomanderCorp.', 'LegitTrains', 'Sugondese' }
 
 class Simulation
 	new: (@name, @companies, @seed=args.seed) =>
@@ -60,7 +47,11 @@ class Simulation
 		for company in *@companies
 			if not company\bankrupt!
 				all_bankrupt = false
-				company\on_month month
+				if company.has_started
+					company\earn!
+					company\square_up_with_gov!
+					company\deduct_loan_interest!
+					company\on_month month
 		all_bankrupt
 	output: =>
 		f = open "#{DATA_DIR}/#{@name}.csv", 'w+'
@@ -85,7 +76,7 @@ class Simulation
 			f\write @fmt_record record
 
 		f\write '\n\n'
-		f\write @fmt_record { 'month', 'company', 'value-at-bankrupcy' }
+		f\write @fmt_record { 'month', 'value-at-bankruptcy', 'cash-at-bankruptcy', 'company' }
 
 		bankrupted = {}
 		for month = 1, #sim_result
@@ -93,15 +84,26 @@ class Simulation
 				continue unless company.bankrupt
 				continue if bankrupted[company.ref]
 				bankrupted[company.ref] = true
-				f\write @fmt_record { month - 1, company.ref, company.value }
+				f\write @fmt_record { month - 1, company.value, company.cash, company.ref }
 
 	fmt_record: (rec) => (concat rec, ',') .. '\n'
 
 sims = {
-	Simulation 'all-afk', [ Afk name for name in *names ]
-	Simulation 'all-normal', [ NormalPlayer name for name in *names ]
+	Simulation 'all-afk-with-and-without-hq', [ Afk i <= #names // 2, names[i] for i=1,#names ]
+	Simulation 'all-afk-without-hq', [ Afk false, names[i] for i=1,#names ]
+	Simulation 'some-afk-some-zombie', [ (i <= #names / 2 and Zombie or Afk) true, names[i] for i=1,#names ]
+	Simulation 'all-addicted', [ Addict name for name in *names ]
+	Simulation 'all-zombie', [ Zombie name for name in *names ]
+	Simulation 'all-addicted-but-one-flakey', [ i <= 1 and (Flakey names[i]) or Addict names[i] for i=1,#names ]
+	Simulation 'all-addicted-but-two-flakey', [ i <= 2 and (Flakey names[i]) or Addict names[i] for i=1,#names ]
+	Simulation 'all-addicted-but-one-delayed', [ i <= 1 and (Delayed names[i]) or Addict names[i] for i=1,#names ]
+	Simulation 'all-addicted-but-two-delayed', [ i <= 2 and (Delayed names[i]) or Addict names[i] for i=1,#names ]
+	Simulation 'all-addicted-but-one-zombie', [ i <= 1 and (Zombie names[i]) or Addict names[i] for i=1,#names ]
+	Simulation 'all-addicted-but-two-zombie', [ i <= 2 and (Zombie names[i]) or Addict names[i] for i=1,#names ]
+	Simulation 'all-flakey-but-one-addicted', [ i <= 1 and (Addict names[i]) or Flakey names[i] for i=1,#names ]
+	Simulation 'all-flakey-but-two-addicted', [ i <= 2 and (Addict names[i]) or Flakey names[i] for i=1,#names ]
 }
-insert sims, Simulation 'interactive', { InteractivePlayer 'player' } if args.interactive
+insert sims, Simulation 'interactive', { Interactive 'player' } if args.interactive
 
 for sim in *sims
 	with sim

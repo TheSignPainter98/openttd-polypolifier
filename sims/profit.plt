@@ -37,21 +37,25 @@ do for [dataset in datasets] {
 	set title sprintf("Dataset %s without hmrc", dataset)
 	unset logscale y
 	plot for [i=2:num_columns] data_loc index 0 using 1:i, \
+		data_loc index 1 using 1:2 with point, \
 		data_loc index 1 using 1:3 with point
 
 	set title sprintf("Dataset %s without hmrc (log-scale)", dataset)
 	set logscale y
 	plot for [i=2:num_columns] data_loc index 0 using 1:i, \
+		data_loc index 1 using 1:2 with point, \
 		data_loc index 1 using 1:3 with point
 
 	set title sprintf("Dataset %s with hmrc", dataset)
 	unset logscale y
 	plot for [i=2:num_columns] data_loc index 2 using 1:i, \
+		data_loc index 3 using 1:2 with point, \
 		data_loc index 3 using 1:3 with point
 
 	set title sprintf("Dataset %s with hmrc (log-scale)", dataset)
 	set logscale y
 	plot for [i=2:num_columns] data_loc index 2 using 1:i, \
+		data_loc index 3 using 1:2 with point, \
 		data_loc index 3 using 1:3 with point
 }
 

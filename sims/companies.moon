@@ -1,5 +1,6 @@
 import read, stderr, stdout from io
 import random from math
+import args from require 'sims.args'
 import min from require 'sims.util'
 import insert from table
 
@@ -10,13 +11,13 @@ LOAN_MAX = 300000
 VAL_CONVERSION = 0.5
 VAL_PROFIT_RATE = 0.25
 
--- TODO: check the cash and loan limits are adhered to!
 class Company
 	new: (@name, @initial_cash=100000, @initial_loan=initial_cash, @initial_value=1) =>
 		@id = 1
 		@last_investment = @initial_value / VAL_CONVERSION
 		@loan_max = LOAN_MAX
 		@has_hq = false
+		@owe_gov = 0
 	set_id: (@id) =>
 	reset: =>
 		@cash = @initial_cash
@@ -27,13 +28,14 @@ class Company
 		@has_hq = false
 
 	-- Company properties
-	active: => @last_investment > 0
+	has_started: true
+	active: => @has_started and @last_investment > 0
 	profit: => @cash - @loan
 	bankrupt: => @cash - @loan + @loan_max < 0
 
 	-- Results
 	status: => {
-		ref: @id -- "#{@name}(#{@id})"
+		ref: args.full_names and "#{@name}(#{@@__name}.#{@id})" or @id
 		cash: @cash
 		value: @value
 		bankrupt: @bankrupt!
@@ -43,10 +45,12 @@ class Company
 	__tostring: =>
 		if @bankrupt!
 			return "#{@name}(#{@id}): FOLDED"
-		"#{@name}(#{@id}): {cash=#{@cash}, loan=#{@loan}}"
+		"#{@name}(#{@id}): {cash=#{@cash}, value=#{@value}, loan=#{@loan}}"
 
 	-- Innate behaviour
-	get_earnings: => VAL_PROFIT_RATE * @value
+	earn: =>
+		@earnings = VAL_PROFIT_RATE * @value
+		@cash += @earnings
 	deduct_loan_interest: => @cash -= @loan * LOAN_INTEREST_RATE
 	loan_increment_round: (amt, up=false) => (1 + amt // LOAN_INCREMENT + (up and 1 or 0)) * LOAN_INCREMENT
 	invest: (amt) =>
@@ -81,9 +85,11 @@ class Company
 		@loan -= amt
 
 	-- Monthly actions
+	square_up_with_gov: =>
+		@cash -= @owe_gov
+		@owe_gov = 0
+	pre_month: (month) =>
 	on_month: (month) =>
-		@cash += @get_earnings!
-		@deduct_loan_interest!
 		{:investment, :repayment, :build_hq} = @get_actions month
 		if @has_hq != build_hq
 			if build_hq
@@ -101,8 +107,8 @@ class Company
 	}
 
 	-- Interactions with government
-	granted: (amt) => @cash += amt
-	taxed: (amt) => @cash -= amt
+	granted: (amt) => @owe_gov -= amt
+	taxed: (amt) => @owe_gov += amt
 
 	-- Company behavioural properties
 	self_investment: => error "Must implement self_investment!"
@@ -110,9 +116,14 @@ class Company
 	build_hq: => error "Must implement build-hq!"
 
 class Afk extends Company
-	build_hq: => false
+	new: (@requires_hq=false, ...) => super ...
+	build_hq: => @requires_hq
 	self_investment: => 0
 	loan_repayment: => 0
+	__tostring: => super!
+
+class Zombie extends Afk
+	self_investment: => 1
 	__tostring: => super!
 
 class Bankrupt extends Company
@@ -120,7 +131,7 @@ class Bankrupt extends Company
 	bankrupt: => true
 	__tostring: => super!
 
-class NormalPlayer extends Company
+class Addict extends Company
 	new: (...) =>
 		super ...
 		@min_investment = 0.8 * random!
@@ -130,11 +141,21 @@ class NormalPlayer extends Company
 	loan_repayment: => 0.5 * @loan
 	__tostring: => super!
 
-class HomelessPlayer extends NormalPlayer
+class Flakey extends Addict
+	participation_chance: 0.25
+	on_month: (month) => super month if random! <= @participation_chance
+	__tostring: => super!
+
+class Delayed extends Addict
+	start_month: 36 + 36 * random!
+	pre_month: (month) => @has_started = @start_month <= month
+	__tostring: => super!
+
+class Homeless extends Addict
 	build_hq: => false
 	__tostring: => super!
 
-class InteractivePlayer extends Company
+class Interactive extends Company
 	new: =>
 		super!
 		@actions = {}
@@ -212,9 +233,12 @@ class InteractivePlayer extends Company
 		print ""
 
 {
+	:Addict
 	:Afk
 	:Bankrupt
-	:InteractivePlayer
-	:NormalPlayer
-	:HomelessPlayer
+	:Delayed
+	:Flakey
+	:Homeless
+	:Interactive
+	:Zombie
 }

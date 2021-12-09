@@ -37,8 +37,8 @@ The model works as follows.
 2. OpenTTD is played as a sequence of monthly actions.
 3. The _value, bank balance_ and whether a company has built an HQ are tracked.
 4. Every month, each company:
-	1. Has an interaction with the government game-script
-	2. Has its earnings added to its bank balance,
+	1. Has its earnings added to its bank balance,
+	2. Has an interaction with the government game-script
 	3. Has loan interest deducted,
 	4. Performs some action, which consists of:
 		- Investing an amount of money in itself (loan is transparent)
