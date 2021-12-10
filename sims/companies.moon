@@ -18,6 +18,7 @@ class Company
 		@loan_max = LOAN_MAX
 		@has_hq = false
 		@owe_gov = 0
+		@auto_loan = true
 	set_id: (@id) =>
 	reset: =>
 		@cash = @initial_cash
@@ -26,6 +27,7 @@ class Company
 		@value = @initial_value
 		@loan_max = LOAN_MAX
 		@has_hq = false
+		@auto_loan = true
 
 	-- Company properties
 	has_started: true
@@ -64,7 +66,7 @@ class Company
 		return 0 unless amt < @cash - @loan + @loan_max
 
 		-- If can't pay, take out a loan
-		if @cash < amt
+		if @cash < amt and @auto_loan
 			loan_incr = @loan_increment_round amt, true
 			if loan_incr + @loan <= @loan_max
 				@cash += loan_incr
@@ -123,6 +125,10 @@ class Afk extends Company
 	__tostring: => super!
 
 class Zombie extends Afk
+	new: (...) => super true, ...
+	reset: =>
+		super!
+		@auto_loan = false
 	self_investment: => 1
 	__tostring: => super!
 

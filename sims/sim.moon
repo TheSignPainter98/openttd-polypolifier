@@ -91,7 +91,7 @@ class Simulation
 sims = {
 	Simulation 'all-afk-with-and-without-hq', [ Afk i <= #names // 2, names[i] for i=1,#names ]
 	Simulation 'all-afk-without-hq', [ Afk false, names[i] for i=1,#names ]
-	Simulation 'some-afk-some-zombie', [ (i <= #names / 2 and Zombie or Afk) true, names[i] for i=1,#names ]
+	Simulation 'some-afk-some-zombie', [ i <= #names / 2 and (Zombie names[i]) or Afk true, names[i] for i=1,#names ]
 	Simulation 'all-addicted', [ Addict name for name in *names ]
 	Simulation 'all-zombie', [ Zombie name for name in *names ]
 	Simulation 'all-addicted-but-one-flakey', [ i <= 1 and (Flakey names[i]) or Addict names[i] for i=1,#names ]
