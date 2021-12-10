@@ -1,6 +1,6 @@
 CANNOT_RH_GRANT_NO_CASH	:Government out of money! Robin Hood tax payout cancelled for Q{NUM} to help clear Treasury log jam
 POLL_ANNUITIED			:Government announces stimulus package of {CURRENCY_LONG} for all British transport companies
-POLL_ANNUITY_MISSED		:As other transport companies across the British Isles get their {CURRENCY_LONG} poll annuity, questions are asked why {PRESIDENT_NAME} hasn't moved the HQ of {COMPANY} to the British Isles
+# POLL_ANNUITY_MISSED		:As other transport companies across the British Isles get their {CURRENCY_LONG} poll annuity, questions are asked why {PRESIDENT_NAME} hasn't moved the HQ of {COMPANY} to the British Isles
 RH_CANNOT_OPERATE		:Westminster panic as Gov. study shows no companies eligible for Robin Hood tax benefit scheme for UK-based companies
 ROBIN_HOODED			:{COMPANY} selected by the government to receive a stimulus grant of {CURRENCY_LONG}
 WELCOME_FIRST			:Government announces tax breaks and new stimulus scheme for all companies headquartered in the British Isles. CEO of {COMPANY}, {PRESIDENT_NAME}, to be congratulated on ability to read fine print.

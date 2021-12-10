@@ -1,6 +1,12 @@
 DOMAIN <- "gov"
 
-ANNUITY <- DOMAIN + ".annuity_sum"
+ANNUITY_LOW_THRESHOLD <- DOMAIN + ".annuity_low_threshold"
+ANNUITY_MED_THRESHOLD <- DOMAIN + ".annuity_med_threshold"
+ANNUITY_HIGH_THRESHOLD <- DOMAIN + ".annuity_high_threshold"
+ANNUITY_LOW_GRANT <- DOMAIN + ".annuity_low_grant"
+ANNUITY_MED_GRANT <- DOMAIN + ".annuity_med_grant"
+ANNUITY_HIGH_GRANT <- DOMAIN + ".annuity_high_grant"
+ANNUITY_MAX_GRANT <- DOMAIN + ".annuity_max_grant"
 BANDIT_TAX_RATE <- DOMAIN + ".bandit_tax_rate"
 BANDIT_TAX_MIN <- DOMAIN + ".bandit_tax_min"
 ROBIN_HOOD_RATE <- DOMAIN + ".robin_hood_rate"

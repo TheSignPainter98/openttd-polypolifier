@@ -13,7 +13,7 @@ class Pot extends Module
 	constructor()
 	{
 		::Module.constructor();
-		content = GetSetting(::POT_INITIAL_CONTENT);
+		content = 0;
 	}
 
 	function Save()
@@ -29,125 +29,141 @@ class Pot extends Module
 		content = data.content;
 	}
 
-	function Refresh()
+	function ZeroContents()
 	{
-		quarterly_rate = GetPercentageSetting(::POT_RATE);
-		cap_spill = GetSetting(::POT_CAP);
-		cap_overdraft = -GetSetting(::POT_OVERDRAFT_CAP);
-		grace_margin = GetSetting(::GRACE_MARGIN);
-		grace_proportion = GetPercentageSetting(::GRACE_PROPORTION);
+		content = 0;
 	}
 
-	function OnQuarter(_)
+	function GetContents()
 	{
-		if (content < 0)
-		{
-			content *= 1 + quarterly_rate;
-			if (content < cap_overdraft)
-				content = cap_overdraft;
-		}
-		else if (cap_spill < content)
-			content = cap_spill;
+		return content;
 	}
 
-	function IsInOverdraft()
+	function Add(amt)
 	{
-		return content < 0;
+		assert(0 <= amt);
+		content += amt;
 	}
 
-	function GetOverdraft()
-	{
-		if (content < 0)
-			return -content;
-		return 0;
-	}
+	/* function Refresh() */
+	/* { */
+	/* 	quarterly_rate = GetPercentageSetting(::POT_RATE); */
+	/* 	cap_spill = GetSetting(::POT_CAP); */
+	/* 	cap_overdraft = -GetSetting(::POT_OVERDRAFT_CAP); */
+	/* 	grace_margin = GetSetting(::GRACE_MARGIN); */
+	/* 	grace_proportion = GetPercentageSetting(::GRACE_PROPORTION); */
+	/* } */
 
-	function MeansTestedTax(company, amount)
-	{
-		if (typeof amount == "float")
-			amount = amount.tointeger();
+	/* function OnQuarter(_) */
+	/* { */
+	/* 	if (content < 0) */
+	/* 	{ */
+	/* 		content *= 1 + quarterly_rate; */
+	/* 		if (content < cap_overdraft) */
+	/* 			content = cap_overdraft; */
+	/* 	} */
+	/* 	else if (cap_spill < content) */
+	/* 		content = cap_spill; */
+	/* } */
 
-		if (CanMeansTestedlyTax(company, amount))
-		{
-			Tax(company, amount);
-			content += amount;
-		}
-	}
+	/* function IsInOverdraft() */
+	/* { */
+	/* 	return content < 0; */
+	/* } */
 
-	function CanMeansTestedlyTax(company, amount)
-	{
-		if (typeof amount == "float")
-			amount - amount.tointeger();
-		return
-			amount + grace_margin <= company.profit
-			&& company.profit - amount <= grace_proportion * company.profit;
-	}
+	/* function GetOverdraft() */
+	/* { */
+	/* 	if (content < 0) */
+	/* 		return -content; */
+	/* 	return 0; */
+	/* } */
 
-	function Tax(company, amount)
-	{
-		if (typeof amount == "float")
-			amount = amount.tointeger();
-		Pay(company, -amount);
-	}
-
-	function Grant(company, amount)
-	{
-		if (typeof amount == "float")
-			amount = amount.tointeger();
-
-		if (!CanGrant(amount))
-			return false;
-
-		content -= amount;
-		Pay(company, amount);
-
-		return true;
-	}
-
-	function CanGrant(amount)
-	{
-		return cap_overdraft <= content - amount;
-	}
-
-	/* function CanGrantWithExtraTax(amount, extra_tax) */
+	/* function MeansTestedTax(company, amount) */
 	/* { */
 	/* 	if (typeof amount == "float") */
 	/* 		amount = amount.tointeger(); */
-	/* 	if (typeof extra_tax == "float") */
-	/* 		extra_tax = extra_tax.tointeger(); */
-	/* 	return content + extra_tax - amount >= cap_overdraft */
+
+	/* 	if (CanMeansTestedlyTax(company, amount)) */
+	/* 	{ */
+	/* 		Tax(company, amount); */
+	/* 		content += amount; */
+	/* 	} */
 	/* } */
 
-	function Pay(company, amount)
-	{
-		if (amount >= 0)
-			GSLog.Error("Paying $" + amount + " to " + company.name + " (" + company.id + ")");
-		else
-			GSLog.Error("Paying -$" + -amount + " to " + company.name + " (" + company.id + ")");
-		if (!GSCompany.ChangeBankBalance(company.id, amount, GSCompany.EXPENSES_OTHER, company.hq)) // TODO: check this actually works?
-			GSLog.Error("Failed to change bank balance of " + company.id + " by £" + amount);
-	}
+	/* function CanMeansTestedlyTax(company, amount) */
+	/* { */
+	/* 	if (typeof amount == "float") */
+	/* 		amount - amount.tointeger(); */
+	/* 	return */
+	/* 		amount + grace_margin <= company.profit */
+	/* 		&& company.profit - amount <= grace_proportion * company.profit; */
+	/* } */
 
-	function OnEvent(args)
-	{
-		local et = args[0];
-		local ev = args[1];
-		switch (et)
-		{
-			case GSEvent.ET_COMPANY_NEW:
-				CompanyNumChange(true);
-				break;
-			case GSEvent.ET_COMPANY_MERGER:
-				CompanyNumChange(false);
-				break;
-			case GSEvent.ET_COMPANY_BANKRUPT:
-				CompanyNumChange(false);
-				break;
-		}
-	}
+	/* function Tax(company, amount) */
+	/* { */
+	/* 	if (typeof amount == "float") */
+	/* 		amount = amount.tointeger(); */
+	/* 	Pay(company, -amount); */
+	/* } */
 
-	function CompanyNumChange(increase)
-	{
-		content += (increase ? 1 : -1) * GetSetting(::POT_COMPANY_CHANGE_BOOST);
-	}
+	/* function Grant(company, amount) */
+	/* { */
+	/* 	if (typeof amount == "float") */
+	/* 		amount = amount.tointeger(); */
+
+	/* 	if (!CanGrant(amount)) */
+	/* 		return false; */
+
+	/* 	content -= amount; */
+	/* 	Pay(company, amount); */
+
+	/* 	return true; */
+	/* } */
+
+	/* function CanGrant(amount) */
+	/* { */
+	/* 	return cap_overdraft <= content - amount; */
+	/* } */
+
+	/* /1* function CanGrantWithExtraTax(amount, extra_tax) *1/ */
+	/* /1* { *1/ */
+	/* /1* 	if (typeof amount == "float") *1/ */
+	/* /1* 		amount = amount.tointeger(); *1/ */
+	/* /1* 	if (typeof extra_tax == "float") *1/ */
+	/* /1* 		extra_tax = extra_tax.tointeger(); *1/ */
+	/* /1* 	return content + extra_tax - amount >= cap_overdraft *1/ */
+	/* /1* } *1/ */
+
+	/* function Pay(company, amount) */
+	/* { */
+	/* 	if (amount >= 0) */
+	/* 		GSLog.Error("Paying $" + amount + " to " + company.name + " (" + company.id + ")"); */
+	/* 	else */
+	/* 		GSLog.Error("Paying -$" + -amount + " to " + company.name + " (" + company.id + ")"); */
+	/* 	if (!GSCompany.ChangeBankBalance(company.id, amount, GSCompany.EXPENSES_OTHER, company.hq)) */
+	/* 		GSLog.Error("Failed to change bank balance of " + company.id + " by £" + amount); */
+	/* } */
+
+	/* function OnEvent(args) */
+	/* { */
+	/* 	local et = args[0]; */
+	/* 	local ev = args[1]; */
+	/* 	switch (et) */
+	/* 	{ */
+	/* 		case GSEvent.ET_COMPANY_NEW: */
+	/* 			CompanyNumChange(true); */
+	/* 			break; */
+	/* 		case GSEvent.ET_COMPANY_MERGER: */
+	/* 			CompanyNumChange(false); */
+	/* 			break; */
+	/* 		case GSEvent.ET_COMPANY_BANKRUPT: */
+	/* 			CompanyNumChange(false); */
+	/* 			break; */
+	/* 	} */
+	/* } */
+
+	/* function CompanyNumChange(increase) */
+	/* { */
+	/* 	content += (increase ? 1 : -1) * GetSetting(::POT_COMPANY_CHANGE_BOOST); */
+	/* } */
 }

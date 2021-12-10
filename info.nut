@@ -2,15 +2,106 @@ require("version.nut")
 require("setting_names.nut")
 
 SELF_SETTINGS <- [
+	/* { */
+	/* 	name = ANNUITY */
+	/* 	description = "Set the annuity gifted to each company every April" */
+	/* 	min_value = 0 */
+	/* 	max_value = 50000 */
+	/* 	easy_value = 20000 */
+	/* 	medium_value = 15000 */
+	/* 	hard_value = 10000 */
+	/* 	custom_value = 20000 */
+	/* 	random_deviation = 0 */
+	/* 	step_size = 5000 */
+	/* 	flags = GSInfo.CONFIG_INGAME */
+	/* } */
 	{
-		name = ANNUITY
-		description = "Set the annuity gifted to each company every April"
-		min_value = 0
-		max_value = 50000
+		name = ANNUITY_LOW_THRESHOLD
+		description = "Poll annuity low grant threshold"
+		min_value = 50000
+		max_value = 150000
+		easy_value = 100000
+		medium_value = 100000
+		hard_value = 100000
+		custom_value = 100000
+		random_deviation = 0
+		step_size = 25000
+		flags = GSInfo.CONFIG_INGAME
+	}
+	{
+		name = ANNUITY_MED_THRESHOLD
+		description = "Poll annuity medium grant threshold"
+		min_value = 175000
+		max_value = 300000
+		easy_value = 200000
+		medium_value = 200000
+		hard_value = 200000
+		custom_value = 200000
+		random_deviation = 0
+		step_size = 25000
+		flags = GSInfo.CONFIG_INGAME
+	}
+	{
+		name = ANNUITY_HIGH_THRESHOLD
+		description = "Poll annuity high grant threshold"
+		min_value = 325000
+		max_value = 500000
+		easy_value = 400000
+		medium_value = 400000
+		hard_value = 400000
+		custom_value = 400000
+		random_deviation = 0
+		step_size = 25000
+		flags = GSInfo.CONFIG_INGAME
+	}
+	{
+		name = ANNUITY_LOW_GRANT
+		description = "Poll annuity low grant"
+		min_value = 10000
+		max_value = 30000
 		easy_value = 20000
-		medium_value = 15000
-		hard_value = 10000
+		medium_value = 20000
+		hard_value = 20000
 		custom_value = 20000
+		random_deviation = 0
+		step_size = 5000
+		flags = GSInfo.CONFIG_INGAME
+	}
+	{
+		name = ANNUITY_MED_GRANT
+		description = "Poll annuity medium grant"
+		min_value = 20000
+		max_value = 45000
+		easy_value = 30000
+		medium_value = 30000
+		hard_value = 30000
+		custom_value = 30000
+		random_deviation = 0
+		step_size = 5000
+		flags = GSInfo.CONFIG_INGAME
+	}
+	{
+		name = ANNUITY_HIGH_GRANT
+		description = "Poll annuity high grant"
+		min_value = 30000
+		max_value = 65000
+		easy_value = 45000
+		medium_value = 45000
+		hard_value = 45000
+		custom_value = 45000
+		random_deviation = 0
+		step_size = 5000
+		flags = GSInfo.CONFIG_INGAME
+	}
+	{
+		name = ANNUITY_MAX_GRANT
+		description = "Poll annuity maximum grant"
+		min_value = 45000
+		max_value = 90000
+		easy_value = 65000
+		medium_value = 65000
+		hard_value = 65000
+		custom_value = 65000
 		random_deviation = 0
 		step_size = 5000
 		flags = GSInfo.CONFIG_INGAME
@@ -204,7 +295,6 @@ SELF_SETTINGS <- [
 		custom_value = 0
 		flags = GSInfo.CONFIG_BOOLEAN
 	}
-	// TODO: add initial delay / start date
 ]
 
 class GovGSInfo extends GSInfo
@@ -216,7 +306,7 @@ class GovGSInfo extends GSInfo
 	function GetDate() { return "1900-01-01"; }
 	function CreateInstance() { return "MultiGS"; }
 	function GetShortName() { return "GVMT"; }
-	function GetAPIVersion() { return "1.9"; }
+	function GetAPIVersion() { return "12"; }
 	function GetSettings()
 		for (local i = 0; i < SELF_SETTINGS.len(); i++)
 		{

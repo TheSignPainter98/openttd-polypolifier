@@ -76,10 +76,11 @@ class CompanyList extends Module
 			join_date = join_date,
 			age_months = DiffMonths(GSDate.GetCurrentDate(), join_date),
 			active = IsActive(id),
+			earnings = Util.Max(0, GSCompany.GetQuarterlyIncome(id, GSCompany.CURRENT_QUARTER + 1)),
 		}
 
-		local q_perf = GSCompany.GetQuarterlyPerformanceRating(id, GSCompany.CURRENT_QUARTER);
-		company.q_perf <- q_perf == -1 ? 0 : q_perf;
+		/* local q_perf = GSCompany.GetQuarterlyPerformanceRating(id, GSCompany.CURRENT_QUARTER); */
+		/* company.q_perf <- q_perf == -1 ? 0 : q_perf; */
 
 		{
 			local _ = GSCompanyMode(id);
@@ -109,9 +110,9 @@ class CompanyList extends Module
 	function IsActive(id)
 	{
 		if (!prev_activity_data)
-			return false;
+			return true;
 		if (!(id in prev_activity_data))
-			return false;
+			return true;
 
 		local curr_data = activity_data[id];
 		local prev_data = prev_activity_data[id];
@@ -141,14 +142,16 @@ class CompanyList extends Module
 			data[id] <- d;
 		}
 
-		foreach (id in company_ids) // TODO: does this need to loop like this? how does the vehicle iteration work?
+		foreach (id in company_ids)
 		{
 			local _ = GSCompanyMode(id);
 			GSLog.Error("Vehicle list has length " + GSVehicleList().Count());
-			foreach (vehicle in GSVehicleList())
+			foreach (vehicle,_ in GSVehicleList())
 			{
 				GSLog.Error("Vehicle " + vehicle + " has owner " + GSVehicle.GetOwner(vehicle));
-				data[GSVehicle.GetOwner(vehicle)].vehicles++;
+				local owner = GSVehicle.GetOwner(vehicle);
+				if (owner != -1)
+					data[owner].vehicles++;
 			}
 		}
 

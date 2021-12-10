@@ -1,0 +1,36 @@
+- Updated generated chart titles
+- More descriptive simulated player names
+- Zombies don't take out loans
+- Added setting for admin fines, off by default
+- Added ID token to admin port messages
+- Renamed comms specs folder
+- Ignore temporary files
+- Simplified taxation system in simulation
+- Added missing ignore
+- Added some documentation
+- Forward signals to child processes to prevent orphans
+- Added interface to fine companies from the admin port
+- Balance implementation changes
+- Added simulations
+- Added name to no hq reminder
+- Minor linting
+- Improved news output
+- Improved location news references
+- Fixed quarter detection
+- Improved module loading
+- Refund load rating due to tree removal by construction
+- Improved news message output
+- Fixed date difference bug
+- Minor refactor
+- Improved module save handling
+- Improved module handling
+- Created module system and refactored all
+- Added readme
+- Added license
+- Added .gitignore
+- Improved pot handling
+- Minor clean
+- Cleaned settings config
+- Use lang file for strings
+- Improved setting label handling
+- Read important values from settings

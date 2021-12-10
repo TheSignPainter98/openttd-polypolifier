@@ -11,8 +11,6 @@ require("setting_names.nut")
 require("version.nut")
 require("welcome.nut")
 
-HmrcGS <- {}
-
 // Bandit tax rate must always be HIGHER than the robin hood tax rate to ensure players submit to the scheme
 
 class MultiGS extends GSController
@@ -36,7 +34,6 @@ class MultiGS extends GSController
 		initial_year = GSDate.GetMonth(date);
 
 		local companies = CompanyList();
-		local pot = Pot();
 
 		// Welcome new companies
 		Welcomer(companies);
@@ -45,8 +42,9 @@ class MultiGS extends GSController
 		FineExecutor(companies);
 
 		// Declare taxes
-		BanditTax(pot, companies);
-		RobinHoodScheme(pot, companies);
+		BanditTax(companies);
+		RobinHoodScheme(companies);
+		local pot = Pot();
 		PollAnnuity(pot, companies);
 		AgencyTax(pot, companies);
 
@@ -78,6 +76,61 @@ class MultiGS extends GSController
 		local first = true;
 		::ModuleCommander.Execute("PostInit");
 		local post_init_ticks = GetTick();
+
+		/* GSLog.Error("ASDF"); */
+		/* local plane_type_names = { */
+		/* 	[GSAirport.PT_HELICOPTER] = "helicopter", */
+		/* 	[GSAirport.PT_SMALL_PLANE] = "plane-small", */
+		/* 	[GSAirport.PT_BIG_PLANE] = "plane-big", */
+		/* 	[GSAirport.PT_INVALID] = "invalid", */
+		/* }; */
+		/* local o = ""; */
+		/* o += "["; */
+		/* foreach (vt in ["RAIL", "ROAD", "WATER", "AIR"]) */
+		/* { */
+		/* 	foreach (e,_ in GSEngineList(GSVehicle["VT_" + vt])) */
+		/* 	{ */
+		/* 		if (!GSEngine.IsValidEngine(e)) */
+		/* 			continue; */
+		/* 		o += "{"; */
+		/* 		o += "\"id\":" + e + ","; */
+		/* 		o += "\"name\":\"" + GSEngine.GetName(e) + "\","; */
+		/* 		o += "\"can_haul\":"; */
+		/* 		o += "["; */
+		/* 		foreach (c,_ in GSCargoList()) */
+		/* 		{ */
+		/* 			if (!GSCargo.IsValidCargo(c)) */
+		/* 				continue; */
+		/* 			if ((vt == "RAIL" && GSEngine.CanPullCargo(e, c)) || GSEngine.CanRefitCargo(e, c)) */
+		/* 				o += "\"" + GSCargo.GetName(c) + "\","; */
+		/* 		} */
+		/* 		o += "],"; */
+		/* 		o += "\"vehicle_type\":\"" + vt + "\","; */
+		/* 		o += "\"cargo\":\"" + GSCargo.GetName(GSEngine.GetCargoType(e)) + "\","; */
+		/* 		o += "\"capacity\":" + GSEngine.GetCapacity(e) + ","; */
+		/* 		o += "\"max_speed\":" + GSEngine.GetMaxSpeed(e) + ","; */
+		/* 		o += "\"price\":" + GSEngine.GetPrice(e) + ","; */
+		/* 		o += "\"max_age\":" + GSEngine.GetMaxAge(e) + ","; */
+		/* 		o += "\"running_cost\":" + GSEngine.GetRunningCost(e) + ","; */
+		/* 		o += "\"power\":" + GSEngine.GetPower(e) + ","; */
+		/* 		o += "\"weight\":" + GSEngine.GetWeight(e) + ","; */
+		/* 		o += "\"max_tractive_effort\":" + GSEngine.GetMaxTractiveEffort(e) + ","; */
+		/* 		local dd = GSEngine.GetDesignDate(e); */
+		/* 		o += "\"design_date\":{\"year\":" + GSDate.GetYear(dd) + ",\"month\":" + GSDate.GetMonth(dd) + ",\"day\":" + GSDate.GetDayOfMonth(dd) + "},"; */
+		/* 		o += "\"vehicle_type_id\":" + GSEngine.GetVehicleType(e) + ","; */
+		/* 		o += "\"is_wagon\":" + GSEngine.IsWagon(e) + ","; */
+		/* 		o += "\"road_type\":\"" + GSRoad.GetName(GSEngine.GetRoadType(e)) + "\","; */
+		/* 		o += "\"rail_type\":\"" + GSRail.GetName(GSEngine.GetRailType(e)) + "\","; */
+		/* 		o += "\"plane_type\":\"" + plane_type_names[GSEngine.GetPlaneType(e)] + "\","; */
+		/* 		o += "\"is_articulated\":" + GSEngine.IsArticulated(e) + ","; */
+		/* 		o += "\"max_order_distance\":" + GSEngine.GetMaximumOrderDistance(e); */
+		/* 		o += "},"; */
+		/* 	} */
+		/* } */
+		/* o += "]" */
+		/* GSLog.Error(o); */
+		/* GSLog.Error("ASDF"); */
+		/* return; */
 
 		while (true)
 		{
@@ -141,8 +194,6 @@ class MultiGS extends GSController
 			::ModuleCommander.Execute("OnEvent", et, ev);
 		}
 	}
-
-	// TODO: scheme_introduction_delay_years = 1
 }
 
 class ModuleJob

@@ -1,12 +1,21 @@
 require("locations.nut");
 require("module.nut");
 require("setting_names.nut");
+require("finances.nut");
 
 class PollAnnuity extends Module
 {
 	pot = null;
 	companies = null;
-	annuity = null;
+
+	// Setting values
+	low_threshold = null;
+	med_threshold = null;
+	high_threshold = null;
+	low_grant = null;
+	med_grant = null;
+	high_grant = null;
+	max_grant = null;
 
 	constructor(pot, companies)
 	{
@@ -17,7 +26,13 @@ class PollAnnuity extends Module
 
 	function Refresh()
 	{
-		annuity = GetSetting(::ANNUITY);
+		low_threshold = GetSetting(::ANNUITY_LOW_THRESHOLD);
+		med_threshold = GetSetting(::ANNUITY_MED_THRESHOLD);
+		high_threshold = GetSetting(::ANNUITY_HIGH_THRESHOLD);
+		low_grant = GetSetting(::ANNUITY_LOW_GRANT);
+		med_grant = GetSetting(::ANNUITY_MED_GRANT);
+		high_grant = GetSetting(::ANNUITY_HIGH_GRANT);
+		max_grant = GetSetting(::ANNUITY_MAX_GRANT);
 	}
 
 	function OnQuarter(args)
@@ -25,36 +40,49 @@ class PollAnnuity extends Module
 		local quarter = args[0];
 		local year = args[1];
 
-		GSLog.Error("Poll annuity checking quarter: " + quarter)
+		GSLog.Error("Poll annuity checking quarter: " + quarter);
 		if (quarter != 2)
 			return;
 
-		GSLog.Error("Granting Poll annuity");
+		GrantPollAnnuity();
+	}
 
-		local n_active_companies = 0;
-		foreach (company in companies.GetInfoList())
-			if (company.active)
-				n_active_companies++;
+	function GrantPollAnnuity()
+	{
+		GSLog.Error("Execuing poll annuity");
+		local company_infos = companies.GetInfoList();
 
-		local total_to_grant = n_active_companies * annuity;
-		if (!pot.CanGrant(total_to_grant))
-			return;
-
-		foreach (company in companies.GetInfoList())
+		// Get annuity weights
+		local tot_grant_max = 0;
+		foreach (company in company_infos)
 		{
-			// Don't pay inactive companies
-			if (!company.active)
+			if (!company.active || company.hq == GSMap.TILE_INVALID)
 				continue;
-
-			// Don't pay non-resident companies
-			if (company.hq == GSMap.TILE_INVALID)
-			{
-				GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.POLL_ANNUITY_MISSED, poll_annuity, company.id, company.id), company.id, Locs.NR_CAPITAL, Locs.CAPITAL);
-				continue;
-			}
-
-			pot.Grant(company, annuity);
-			GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.POLL_ANNUITIED, poll_annuity), company.id, GSNews.NR_TILE, company.hq);
+			company.poll_annuity_max_payout <- GetMaxPayout(company);
+			tot_grant_max += company.poll_annuity_max_payout;
 		}
+
+		// Payout annuities
+		foreach (company in company_infos)
+		{
+			if (!company.active || company.hq == GSMap.TILE_INVALID)
+				continue;
+			Finances.Grant(company, 10000 + Util.Min(company.poll_annuity_max_payout, pot.GetContents() * company.poll_annuity_max_payout / tot_grant_max));
+		}
+
+		// Government takes any leftovers for itself.
+		pot.ZeroContents();
+	}
+
+	function GetMaxPayout(company)
+	{
+		local v = company.value;
+		if (v <= low_threshold) // 100000)
+			return low_grant; // 20000;
+		if (v <= med_threshold) // 200000)
+			return med_grant; // 30000;
+		if (v <= high_threshold) // 400000)
+			return high_grant; // 45000;
+		return max_grant; // 65000;
 	}
 }
