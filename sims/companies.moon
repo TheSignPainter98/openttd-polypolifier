@@ -37,7 +37,7 @@ class Company
 
 	-- Results
 	status: => {
-		ref: args.full_names and "#{@name}(#{@@__name}.#{@id})" or @id
+		ref: args.full_names and "#{@name}(#{@@__name}.#{@id})" or "#{@@__name}.#{@id}"
 		cash: @cash
 		value: @value
 		bankrupt: @bankrupt!
