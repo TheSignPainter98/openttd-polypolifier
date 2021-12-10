@@ -43,6 +43,12 @@ class FineExecutor extends Module
 		if (data.action != "fine")
 			return;
 
+		if (!GetSetting(::ALLOW_ADMIN_FINES))
+		{
+			GSLog.Error("Fines are currently disabled in the settings.");
+			return;
+		}
+
 		local name = data.company_name;
 		local amt = data.amount;
 

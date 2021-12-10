@@ -195,6 +195,15 @@ SELF_SETTINGS <- [
 		step_size = 5
 		flags = GSInfo.CONFIG_INGAME
 	}
+	{
+		name = ALLOW_ADMIN_FINES
+		description = "Allow fines to be made by request through the admin port"
+		easy_value = 0
+		medium_value = 0
+		hard_value = 0
+		custom_value = 0
+		flags = GSInfo.CONFIG_BOOLEAN
+	}
 	// TODO: add initial delay / start date
 ]
 
