@@ -180,6 +180,8 @@ class CompanyList extends Module
 	{
 		ev = ::GSEventCompanyNew.Convert(ev);
 		local id = ev.GetCompanyID();
+		if (GSCompany.GetName(id) == "TownCars")
+			return;
 		company_ids.append(id);
 		join_dates[id] <- GSDate.GetCurrentDate();
 	}
@@ -187,12 +189,16 @@ class CompanyList extends Module
 	function OnCompanyMerger(ev)
 	{
 		ev = ::GSEventCompanyMerger.Convert(ev);
+		if (GSCompany.GetName(id) == "TownCars")
+			return;
 		Forget(ev.GetOldCompanyID());
 	}
 
 	function OnCompanyBankrupt(ev)
 	{
 		ev = ::GSEventCompanyBankrupt.Convert(ev);
+		if (GSCompany.GetName(id) == "TownCars")
+			return;
 		Forget(ev.GetCompanyID());
 	}
 
