@@ -8,6 +8,10 @@
 		"action": {
 			"type": "string",
 			"description": "The action which this message represents"
+		},
+		"token": {
+			"type": "integer",
+			"description": "A unique identifier for this communication or -1 if there was an error getting that token"
 		}
 	},
 	"anyOf": [

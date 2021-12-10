@@ -25,24 +25,33 @@ class FineExecutor extends Module
 	{
 		if (typeof(data) != "table")
 		{
-			SendErrorResponse("Expected a json mapping from admin port, instead got a " + typeof data);
+			SendErrorResponse(-1, "Expected a json mapping from admin port, instead got a " + typeof data);
 			return;
 		}
+		if (!data.rawin("token"))
+		{
+			SendErrorResponse(-1, "Expected a token field in admin port message object");
+			return;
+		}
+		local token = data.token;
 		if (!data.rawin("action"))
 		{
-			SendErrorResponse("Expected 'action' field in admin port message object");
+			SendErrorResponse(token, "Expected 'action' field in admin port message object");
 			return;
 		}
 
 		if (data.action != "fine")
 			return;
 
-		local id = data.company_id;
+		local name = data.company_name;
 		local amt = data.amount;
+
+		if (amt <= 0)
+			return;
 
 		if (GSCompany.ResolveCompanyID(id) == GSCompany.COMPANY_INVALID)
 		{
-			SendErrorResponse("No such company: " + id);
+			SendErrorResponse(token, "No such company: " + id);
 			return;
 		}
 
@@ -55,7 +64,7 @@ class FineExecutor extends Module
 			}
 		if (!target)
 		{
-			SendErrorResponse("Failed to find company with id " + id + " from maintained list!");
+			SendErrorResponse(token, "Failed to find company with id " + id + " from maintained list!");
 			return;
 		}
 
@@ -66,23 +75,26 @@ class FineExecutor extends Module
 		else
 			GSCompany.ChangeBankBalance(target.id, -amt, GSCompany.EXPENSES_OTHER, CAPITAL);
 
+		SendSuccResponse(token);
 		return true;
 	}
 
-	function SendFineResponse()
+	function SendSuccResponse(token)
 	{
 		local resp = {
 			action = "response",
+			token = token,
 			error = false,
 		};
 		GSAdmin.Send(resp);
 	}
 
-	function SendErrorResponse(err)
+	function SendErrorResponse(token, err)
 	{
 		GSLog.Error(err);
 		local resp = {
 			action = "fine_response",
+			token = token,
 			error = true,
 			reason = err,
 		};

@@ -8,6 +8,10 @@
 		"action": {
 			"type": "string",
 			"description": "The action which this message represents"
+		},
+		"token": {
+			"type": "integer",
+			"description": "A unique identifier for this communication"
 		}
 	},
 	"anyOf": [
@@ -16,16 +20,16 @@
 				"action": {
 					"const": "fine"
 				},
-				"company_id": {
-					"type": "integer",
+				"company_name": {
+					"type": "string",
 					"description": "The ID of the company to fine"
 				},
 				"amount": {
 					"type": "integer",
-					"description": "The amount of money to deduct from the specified company"
+					"description": "The amount of money to deduct from the specified company, non-positive values are ignored"
 				}
 			}
 		}
 	],
-	"required": [ "action" ]
+	"required": [ "action", "token" ]
 }
