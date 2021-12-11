@@ -49,7 +49,7 @@ class MultiGS extends GSController
 		AgencyTax(pot, companies);
 
 		// Fix annoying rating changes.
-		RatingMedic();
+		/* RatingMedic(); */
 
 		GSLog.Error("Registered " + ::ModuleCommander.modules.len() + " modules");
 	}
