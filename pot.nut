@@ -19,7 +19,7 @@ class Pot extends Module
 	function Save()
 	{
 		return {
-			content = content,
+			content = SaveFloat(content),
 		}
 	}
 
@@ -28,7 +28,7 @@ class Pot extends Module
 		GSLog.Error("Loading pot");
 		if (version != ::VERSION)
 			return;
-		content = data.content;
+		content = LoadFloat(data.content);
 	}
 
 	function ZeroContents()
