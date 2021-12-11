@@ -213,6 +213,8 @@ class CompanyList extends Module
 	function Forget(id)
 	{
 		local idx = Util.Find(company_ids, id);
+		if (idx == null)
+			return;
 		company_ids.remove(idx);
 		join_dates.remove(idx);
 	}
