@@ -54,21 +54,21 @@ class MultiGS extends GSController
 		GSLog.Error("Registered " + ::ModuleCommander.modules.len() + " modules");
 	}
 
-	function Save()
-	{
-		return {
-			last_month = last_month,
-			last_quarter = last_quarter,
-			modules = ::ModuleCommander.Save(),
-		}
-	}
+	/* function Save() */
+	/* { */
+	/* 	return { */
+	/* 		last_month = last_month, */
+	/* 		last_quarter = last_quarter, */
+	/* 		modules = ::ModuleCommander.Save(), */
+	/* 	} */
+	/* } */
 
-	function Load(version, data)
-	{
-		last_month = data.last_month;
-		last_quarter = data.last_quarter;
-		::ModuleCommander.Load(version, data.modules);
-	}
+	/* function Load(version, data) */
+	/* { */
+	/* 	last_month = data.last_month; */
+	/* 	last_quarter = data.last_quarter; */
+	/* 	::ModuleCommander.Load(version, data.modules); */
+	/* } */
 
 	function Start()
 	{
