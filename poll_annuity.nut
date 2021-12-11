@@ -9,6 +9,7 @@ class PollAnnuity extends Module
 	companies = null;
 
 	// Setting values
+	baseline = null;
 	low_threshold = null;
 	med_threshold = null;
 	high_threshold = null;
@@ -26,6 +27,7 @@ class PollAnnuity extends Module
 
 	function Refresh()
 	{
+		baseline = GetSetting(::ANNUITY_BASELINE);
 		low_threshold = GetSetting(::ANNUITY_LOW_THRESHOLD);
 		med_threshold = GetSetting(::ANNUITY_MED_THRESHOLD);
 		high_threshold = GetSetting(::ANNUITY_HIGH_THRESHOLD);
@@ -49,15 +51,19 @@ class PollAnnuity extends Module
 
 	function GrantPollAnnuity()
 	{
-		GSLog.Error("Execuing poll annuity");
+		GSLog.Error("Executing poll annuity");
 		local company_infos = companies.GetInfoList();
+		GSLog.Error(company_infos.len());
 
 		// Get annuity weights
 		local tot_grant_max = 0;
 		foreach (company in company_infos)
 		{
 			if (!company.active || company.hq == GSMap.TILE_INVALID)
+			{
+				GSLog.Error("Company " + company.name + " ineligible for poll annuity: active? " + company.active + " hq? " + company.hq != GSMap.TILE_INVALID);
 				continue;
+			}
 			company.poll_annuity_max_payout <- GetMaxPayout(company);
 			tot_grant_max += company.poll_annuity_max_payout;
 		}
@@ -67,7 +73,7 @@ class PollAnnuity extends Module
 		{
 			if (!company.active || company.hq == GSMap.TILE_INVALID)
 				continue;
-			Finances.Grant(company, 10000 + Util.Min(company.poll_annuity_max_payout, pot.GetContents() * company.poll_annuity_max_payout / tot_grant_max));
+			Finances.Grant(company, baseline + Util.Min(company.poll_annuity_max_payout, pot.GetContents() * company.poll_annuity_max_payout / tot_grant_max));
 		}
 
 		// Government takes any leftovers for itself.

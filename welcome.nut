@@ -26,7 +26,9 @@ class Welcomer extends Module
 
 	function Load(version, data)
 	{
-		parent.Load(version, data);
+		GSLog.Error("Loading welcome");
+		if (version != ::VERSION)
+			return;
 		welcomed_ids = data;
 	}
 

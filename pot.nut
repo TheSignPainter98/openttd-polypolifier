@@ -25,7 +25,9 @@ class Pot extends Module
 
 	function Load(version, data)
 	{
-		parent.Load(version, data);
+		GSLog.Error("Loading pot");
+		if (version != ::VERSION)
+			return;
 		content = data.content;
 	}
 

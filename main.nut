@@ -19,7 +19,7 @@ class MultiGS extends GSController
 
 	last_month = null;
 	last_quarter = null;
-	last_year = null;
+	last_year = null; // TODO: save me
 	initial_month = null;
 	initial_year = null;
 
@@ -49,26 +49,28 @@ class MultiGS extends GSController
 		AgencyTax(pot, companies);
 
 		// Fix annoying rating changes.
-		/* RatingMedic(); */
+		if (GetSetting(::RATING_MEDIC))
+			RatingMedic();
 
 		GSLog.Error("Registered " + ::ModuleCommander.modules.len() + " modules");
 	}
 
-	/* function Save() */
-	/* { */
-	/* 	return { */
-	/* 		last_month = last_month, */
-	/* 		last_quarter = last_quarter, */
-	/* 		modules = ::ModuleCommander.Save(), */
-	/* 	} */
-	/* } */
+	function Save()
+	{
+		return {
+			last_month = last_month,
+			last_quarter = last_quarter,
+			modules = ::ModuleCommander.Save(),
+		}
+	}
 
-	/* function Load(version, data) */
-	/* { */
-	/* 	last_month = data.last_month; */
-	/* 	last_quarter = data.last_quarter; */
-	/* 	::ModuleCommander.Load(version, data.modules); */
-	/* } */
+	function Load(version, data)
+	{
+		GSLog.Error("Loading main");
+		last_month = data.last_month;
+		last_quarter = data.last_quarter;
+		::ModuleCommander.Load(version, data.modules);
+	}
 
 	function Start()
 	{

@@ -20,19 +20,26 @@ class CompanyList extends Module
 
 	function Save()
 	{
+		local packed_join_dates = [];
+		foreach (d in join_dates)
+			packed_join_dates.append(SaveDate(d));
 		return {
-			company_ids = company_ids
-				join_dates = join_dates
-				prev_activity_data = prev_activity_data
+			company_ids = company_ids,
+			join_dates = packed_join_dates,
+			prev_activity_data = prev_activity_data,
 		}
 	}
 
 	function Load(version, data)
 	{
-		parent.Load(version, data);
+		/* parent.Load(version, data); */
+		if (version != ::VERSION)
+			return;
 		company_ids = data.company_ids;
 		prev_activity_data = data.prev_activity_data;
-		join_dates = data.join_dates;
+		join_dates = [];
+		foreach (d in data.join_dates)
+			join_dates.append(LoadDate(d));
 	}
 
 	function Refresh()
@@ -42,8 +49,12 @@ class CompanyList extends Module
 
 		companies = [];
 		local n_companies = company_ids.len();
+		GSLog.Error("Collating data on " + n_companies + " companies");
 		for (local i = 0; i < n_companies; i++)
-			companies.append(GetCompanyInfo(company_ids[i], join_dates[company_ids[i]]))
+			if (GSCompany.GetName(company_ids[i]) != "TownCars")
+				companies.append(GetCompanyInfo(company_ids[i], join_dates[company_ids[i]]))
+			else
+				GSLog.Error("Ignoring company " + GSCompany.GetName(company_ids[i]));
 	}
 
 	function OnYear(_)
@@ -180,8 +191,7 @@ class CompanyList extends Module
 	{
 		ev = ::GSEventCompanyNew.Convert(ev);
 		local id = ev.GetCompanyID();
-		if (GSCompany.GetName(id) == "TownCars")
-			return;
+		GSLog.Error("Detected new company with id " + id);
 		company_ids.append(id);
 		join_dates[id] <- GSDate.GetCurrentDate();
 	}
@@ -189,16 +199,14 @@ class CompanyList extends Module
 	function OnCompanyMerger(ev)
 	{
 		ev = ::GSEventCompanyMerger.Convert(ev);
-		if (GSCompany.GetName(id) == "TownCars")
-			return;
+		GSLog.Error("Detected merged company with id " + ev.GetOldCompanyID());
 		Forget(ev.GetOldCompanyID());
 	}
 
 	function OnCompanyBankrupt(ev)
 	{
 		ev = ::GSEventCompanyBankrupt.Convert(ev);
-		if (GSCompany.GetName(id) == "TownCars")
-			return;
+		GSLog.Error("Detected bankrupt company with id " + ev.GetCompanyID());
 		Forget(ev.GetCompanyID());
 	}
 

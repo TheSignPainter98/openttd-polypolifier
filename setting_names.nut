@@ -1,5 +1,6 @@
 DOMAIN <- "gov"
 
+ANNUITY_BASELINE <- DOMAIN + ".annuity_baseline"
 ANNUITY_LOW_THRESHOLD <- DOMAIN + ".annuity_low_threshold"
 ANNUITY_MED_THRESHOLD <- DOMAIN + ".annuity_med_threshold"
 ANNUITY_HIGH_THRESHOLD <- DOMAIN + ".annuity_high_threshold"
@@ -22,3 +23,4 @@ GRACE_MARGIN <- DOMAIN + ".grace_margin"
 GRACE_PROPORTION <- DOMAIN + ".grace_proportion"
 WELCOME_DELAY <- DOMAIN + ".welcome_delay"
 ALLOW_ADMIN_FINES <- DOMAIN + ".allow_admin_fines"
+RATING_MEDIC <- DOMAIN + ".rating_medic"

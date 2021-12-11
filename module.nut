@@ -74,6 +74,7 @@ class Module
 	function Save() { }
 	function Load(version, data)
 	{
+		GSLog.Error("Loading module");
 		if (version != ::VERSION)
 			return;
 	}

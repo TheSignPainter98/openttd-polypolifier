@@ -2,19 +2,19 @@ require("version.nut")
 require("setting_names.nut")
 
 SELF_SETTINGS <- [
-	/* { */
-	/* 	name = ANNUITY */
-	/* 	description = "Set the annuity gifted to each company every April" */
-	/* 	min_value = 0 */
-	/* 	max_value = 50000 */
-	/* 	easy_value = 20000 */
-	/* 	medium_value = 15000 */
-	/* 	hard_value = 10000 */
-	/* 	custom_value = 20000 */
-	/* 	random_deviation = 0 */
-	/* 	step_size = 5000 */
-	/* 	flags = GSInfo.CONFIG_INGAME */
-	/* } */
+	{
+		name = ANNUITY_BASELINE
+		description = "Set the minimum annuity gifted to each company every April"
+		min_value = 0
+		max_value = 100000
+		easy_value = 10000
+		medium_value = 10000
+		hard_value = 10000
+		custom_value = 10000
+		random_deviation = 0
+		step_size = 5000
+		flags = GSInfo.CONFIG_INGAME
+	}
 	{
 		name = ANNUITY_LOW_THRESHOLD
 		description = "Poll annuity low grant threshold"
@@ -289,6 +289,15 @@ SELF_SETTINGS <- [
 	{
 		name = ALLOW_ADMIN_FINES
 		description = "Allow fines to be made by request through the admin port"
+		easy_value = 0
+		medium_value = 0
+		hard_value = 0
+		custom_value = 0
+		flags = GSInfo.CONFIG_BOOLEAN | GSInfo.CONFIG_INGAME
+	}
+	{
+		name = RATING_MEDIC
+		description = "Allow the rating medic to run (keep off for large maps)"
 		easy_value = 0
 		medium_value = 0
 		hard_value = 0
