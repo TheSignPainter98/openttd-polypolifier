@@ -13,7 +13,7 @@ class CompanyList extends Module
 	{
 		::Module.constructor();
 		company_ids = [];
-		join_dates = {};
+		join_dates = [];
 		activity_data = null;
 		prev_activity_data = null;
 	}
@@ -22,7 +22,7 @@ class CompanyList extends Module
 	{
 		local packed_join_dates = [];
 		foreach (d in join_dates)
-			packed_join_dates.append(SaveDate(d));
+			packed_join_dates.append(SaveDate(v));
 		return {
 			company_ids = company_ids,
 			join_dates = packed_join_dates,
@@ -52,7 +52,7 @@ class CompanyList extends Module
 		GSLog.Error("Collating data on " + n_companies + " companies");
 		for (local i = 0; i < n_companies; i++)
 			if (GSCompany.GetName(company_ids[i]) != "TownCars")
-				companies.append(GetCompanyInfo(company_ids[i], join_dates[company_ids[i]]))
+				companies.append(GetCompanyInfo(company_ids[i], join_dates[i]))
 			else
 				GSLog.Error("Ignoring company " + GSCompany.GetName(company_ids[i]));
 	}
@@ -193,7 +193,7 @@ class CompanyList extends Module
 		local id = ev.GetCompanyID();
 		GSLog.Error("Detected new company with id " + id);
 		company_ids.append(id);
-		join_dates[id] <- GSDate.GetCurrentDate();
+		join_dates.append(GSDate.GetCurrentDate());
 	}
 
 	function OnCompanyMerger(ev)
@@ -214,6 +214,6 @@ class CompanyList extends Module
 	{
 		local idx = Util.Find(company_ids, id);
 		company_ids.remove(idx);
-		delete join_dates[idx];
+		join_dates.remove(idx);
 	}
 }
