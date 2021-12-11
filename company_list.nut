@@ -22,7 +22,7 @@ class CompanyList extends Module
 	{
 		local packed_join_dates = [];
 		foreach (d in join_dates)
-			packed_join_dates.append(SaveDate(v));
+			packed_join_dates.append(SaveDate(d));
 		return {
 			company_ids = company_ids,
 			join_dates = packed_join_dates,
