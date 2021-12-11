@@ -1,3 +1,10 @@
+- Fixed typo
+- Store join dates as an array
+- Added rating medic setting, fixed versions, make sure Bob can feed his kids
+- Remove rating medic
+- Disable saving and loading
+- Ignore town cars
+- Reimplemented tax system
 - Updated generated chart titles
 - More descriptive simulated player names
 - Zombies don't take out loans
