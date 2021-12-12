@@ -48,6 +48,10 @@ class CompanyList extends Module
 			UpdateActivityData();
 
 		companies = [];
+		company_ids = [];
+		for (local id = GSCompany.COMPANY_FIRST; id < GSCompany.COMPANY_LAST; id++)
+			if (GSCompany.ResolveCompanyID(id))
+				company_ids.append(id);
 		local n_companies = company_ids.len();
 		GSLog.Error("Collating data on " + n_companies + " companies");
 		for (local i = 0; i < n_companies; i++)
@@ -167,55 +171,5 @@ class CompanyList extends Module
 		}
 
 		return data;
-	}
-
-	function OnEvent(args)
-	{
-		local et = args[0];
-		local ev = args[1];
-		switch (et)
-		{
-			case GSEvent.ET_COMPANY_NEW:
-				OnCompanyNew(ev);
-				break;
-			case GSEvent.ET_COMPANY_MERGER:
-				OnCompanyMerger(ev);
-				break;
-			case GSEvent.ET_COMPANY_BANKRUPT:
-				OnCompanyBankrupt(ev);
-				break;
-		}
-	}
-
-	function OnCompanyNew(ev)
-	{
-		ev = ::GSEventCompanyNew.Convert(ev);
-		local id = ev.GetCompanyID();
-		GSLog.Error("Detected new company with id " + id);
-		company_ids.append(id);
-		join_dates.append(GSDate.GetCurrentDate());
-	}
-
-	function OnCompanyMerger(ev)
-	{
-		ev = ::GSEventCompanyMerger.Convert(ev);
-		GSLog.Error("Detected merged company with id " + ev.GetOldCompanyID());
-		Forget(ev.GetOldCompanyID());
-	}
-
-	function OnCompanyBankrupt(ev)
-	{
-		ev = ::GSEventCompanyBankrupt.Convert(ev);
-		GSLog.Error("Detected bankrupt company with id " + ev.GetCompanyID());
-		Forget(ev.GetCompanyID());
-	}
-
-	function Forget(id)
-	{
-		local idx = Util.Find(company_ids, id);
-		if (idx == null)
-			return;
-		company_ids.remove(idx);
-		join_dates.remove(idx);
 	}
 }
