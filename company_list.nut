@@ -49,9 +49,13 @@ class CompanyList extends Module
 
 		companies = [];
 		company_ids = [];
-		for (local id = GSCompany.COMPANY_FIRST; id < GSCompany.COMPANY_LAST; id++)
-			if (GSCompany.ResolveCompanyID(id))
+		join_dates = [];
+		for (local id = GSCompany.COMPANY_FIRST; id < GSCompany.COMPANY_LAST; id++) {
+			if (GSCompany.ResolveCompanyID(id) != GSCompany.COMPANY_INVALID) {
 				company_ids.append(id);
+				join_dates.append(GSDate.GetDate(1, 1, 1900));
+			}
+		}
 		local n_companies = company_ids.len();
 		GSLog.Error("Collating data on " + n_companies + " companies");
 		for (local i = 0; i < n_companies; i++)
