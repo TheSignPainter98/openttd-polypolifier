@@ -53,8 +53,8 @@ class Simulation
 					company\deduct_loan_interest!
 					company\on_month month
 		all_bankrupt
-	output: =>
-		f = open "#{DATA_DIR}/#{@name}.csv", 'w+'
+	output: (sim_num) =>
+		f = open "#{DATA_DIR}/#{sim_num}@#{@name}.csv", 'w+'
 		@output_sim_result f, @results.no_gov
 		f\write '\n\n'
 		@output_sim_result f, @results.gov
@@ -89,23 +89,23 @@ class Simulation
 	fmt_record: (rec) => (concat rec, ',') .. '\n'
 
 sims = {
-	Simulation 'all-afk-with-and-without-hq', [ Afk i <= #names // 2, names[i] for i=1,#names ]
-	Simulation 'all-afk-without-hq', [ Afk false, names[i] for i=1,#names ]
-	Simulation 'some-afk-some-zombie', [ i <= #names / 2 and (Zombie names[i]) or Afk true, names[i] for i=1,#names ]
+	Simulation 'all-AFK-with-and-without-HQ', [ Afk i <= #names // 2, names[i] for i=1,#names ]
+	Simulation 'all-AFK-without-HQ', [ Afk false, names[i] for i=1,#names ]
+	Simulation 'some-AFK-some-zombie', [ i <= #names / 2 and (Zombie names[i]) or Afk true, names[i] for i=1,#names ]
 	Simulation 'all-addicted', [ Addict name for name in *names ]
 	Simulation 'all-zombie', [ Zombie name for name in *names ]
-	Simulation 'all-addicted-but-one-flakey', [ i <= 1 and (Flakey names[i]) or Addict names[i] for i=1,#names ]
-	Simulation 'all-addicted-but-two-flakey', [ i <= 2 and (Flakey names[i]) or Addict names[i] for i=1,#names ]
-	Simulation 'all-addicted-but-one-delayed', [ i <= 1 and (Delayed names[i]) or Addict names[i] for i=1,#names ]
-	Simulation 'all-addicted-but-two-delayed', [ i <= 2 and (Delayed names[i]) or Addict names[i] for i=1,#names ]
-	Simulation 'all-addicted-but-one-zombie', [ i <= 1 and (Zombie names[i]) or Addict names[i] for i=1,#names ]
-	Simulation 'all-addicted-but-two-zombie', [ i <= 2 and (Zombie names[i]) or Addict names[i] for i=1,#names ]
-	Simulation 'all-flakey-but-one-addicted', [ i <= 1 and (Addict names[i]) or Flakey names[i] for i=1,#names ]
-	Simulation 'all-flakey-but-two-addicted', [ i <= 2 and (Addict names[i]) or Flakey names[i] for i=1,#names ]
+	Simulation 'all-addicted-but-1-flakey', [ i <= 1 and (Flakey names[i]) or Addict names[i] for i=1,#names ]
+	Simulation 'all-addicted-but-2-flakey', [ i <= 2 and (Flakey names[i]) or Addict names[i] for i=1,#names ]
+	Simulation 'all-addicted-but-1-delayed', [ i <= 1 and (Delayed names[i]) or Addict names[i] for i=1,#names ]
+	Simulation 'all-addicted-but-2-delayed', [ i <= 2 and (Delayed names[i]) or Addict names[i] for i=1,#names ]
+	Simulation 'all-addicted-but-1-zombie', [ i <= 1 and (Zombie names[i]) or Addict names[i] for i=1,#names ]
+	Simulation 'all-addicted-but-2-zombie', [ i <= 2 and (Zombie names[i]) or Addict names[i] for i=1,#names ]
+	Simulation 'all-flakey-but-1-addicted', [ i <= 1 and (Addict names[i]) or Flakey names[i] for i=1,#names ]
+	Simulation 'all-flakey-but-2-addicted', [ i <= 2 and (Addict names[i]) or Flakey names[i] for i=1,#names ]
 }
 insert sims, Simulation 'interactive', { Interactive 'player' } if args.interactive
 
-for sim in *sims
-	with sim
+for i=1,#sims
+	with sims[i]
 		\execute args.duration
-		\output!
+		\output i
