@@ -22,6 +22,8 @@ class Company
 		@has_hq = false
 		@owe_gov = 0
 		@auto_loan = true
+		@tot_granted = 0
+		@tot_taxed = 0
 	set_id: (@id) =>
 	reset: =>
 		@cash = @initial_cash
@@ -31,6 +33,8 @@ class Company
 		@loan_max = LOAN_MAX
 		@has_hq = false
 		@auto_loan = true
+		@tot_granted = 0
+		@tot_taxed = 0
 
 	-- Company properties
 	has_started: true
@@ -43,6 +47,8 @@ class Company
 		ref: args.full_names and "#{@name}(#{@@__name}.#{@id})" or "#{@@__name}.#{@id}"
 		cash: @cash
 		value: @value
+		-- granted: @tot_granted
+		-- taxed: @tot_taxed
 		bankrupt: @bankrupt!
 	}
 
@@ -117,8 +123,12 @@ class Company
 	}
 
 	-- Interactions with government
-	granted: (amt) => @owe_gov -= amt
-	taxed: (amt) => @owe_gov += amt
+	granted: (amt) =>
+		@tot_granted += amt
+		@owe_gov -= amt
+	taxed: (amt) =>
+		@tot_taxed += amt
+		@owe_gov += amt
 
 	-- Company behavioural properties
 	self_investment: => error "Must implement self_investment!"
