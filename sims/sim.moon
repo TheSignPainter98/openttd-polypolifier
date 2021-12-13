@@ -1,6 +1,7 @@
 #!/usr/bin/moon
 
 import open, stderr from io
+import format from string
 import concat, insert from table
 import randomseed from math
 import args from require 'sims.args'
@@ -54,7 +55,7 @@ class Simulation
 					company\on_month month
 		all_bankrupt
 	output: (sim_num) =>
-		f = open "#{DATA_DIR}/#{sim_num}@#{@name}.csv", 'w+'
+		f = open "#{DATA_DIR}/#{format '%02d', sim_num}@#{@name}.csv", 'w+'
 		@output_sim_result f, @results.no_gov
 		f\write '\n\n'
 		@output_sim_result f, @results.gov
