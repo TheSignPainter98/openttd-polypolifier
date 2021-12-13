@@ -53,7 +53,6 @@ class PollAnnuity extends Module
 	{
 		GSLog.Error("Executing poll annuity");
 		local company_infos = companies.GetInfoList();
-		GSLog.Error(company_infos.len());
 
 		// Get annuity weights
 		local tot_grant_max = 0;
