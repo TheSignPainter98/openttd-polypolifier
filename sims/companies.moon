@@ -47,8 +47,8 @@ class Company
 		ref: args.full_names and "#{@name}(#{@@__name}.#{@id})" or "#{@@__name}.#{@id}"
 		cash: @cash
 		value: @value
-		-- granted: @tot_granted
-		-- taxed: @tot_taxed
+		granted: @tot_granted
+		taxed: @tot_taxed
 		bankrupt: @bankrupt!
 	}
 

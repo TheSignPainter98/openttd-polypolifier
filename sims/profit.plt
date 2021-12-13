@@ -39,32 +39,47 @@ do for [dataset in datasets] {
 	dataset_name = system("echo '" . dataset_name . "' | sed 's/-/ /g' | sed 's/\\<./\\u&/'")
 
 	stats [1:1] data_loc index 0 using 1 nooutput
-	num_columns = STATS_columns
+	num_columns_0 = STATS_columns
+	stats data_loc index 1 using 4 nooutput
+	num_columns_4 = STATS_columns
+
 
 	set label
 	set title sprintf("Simulation %s: %s (without government intervention)", dataset_idx, dataset_name)
 	unset logscale y
-	plot for [i=2:num_columns] data_loc index 0 using 1:i, \
-		data_loc index 1 using 1:2 with point, \
-		data_loc index 1 using 1:3 with point
+	plot for [i=2:num_columns_0] data_loc index 0 using 1:i, \
+		data_loc index 2 using 1:2 with point, \
+		data_loc index 2 using 1:3 with point
 
 	set title sprintf("Simulation %s: %s (with government intervention)", dataset_idx, dataset_name)
 	unset logscale y
-	plot for [i=2:num_columns] data_loc index 2 using 1:i, \
-		data_loc index 3 using 1:2 with point, \
-		data_loc index 3 using 1:3 with point
+	plot for [i=2:num_columns_0] data_loc index 3 using 1:i, \
+		data_loc index 5 using 1:2 with point, \
+		data_loc index 5 using 1:3 with point
 
 	set title sprintf("Simulation %s: %s (without government intervention) (log-scale)", dataset_idx, dataset_name)
 	set logscale y
-	plot for [i=2:num_columns] data_loc index 0 using 1:i, \
-		data_loc index 1 using 1:2 with point, \
-		data_loc index 1 using 1:3 with point
+	plot for [i=2:num_columns_0] data_loc index 0 using 1:i, \
+		data_loc index 2 using 1:2 with point, \
+		data_loc index 2 using 1:3 with point
 
 	set title sprintf("Simulation %s: %s (with government intervention) (log-scale)", dataset_idx, dataset_name)
 	set logscale y
-	plot for [i=2:num_columns] data_loc index 2 using 1:i, \
-		data_loc index 3 using 1:2 with point, \
-		data_loc index 3 using 1:3 with point
+	plot for [i=2:num_columns_0] data_loc index 3 using 1:i, \
+		data_loc index 5 using 1:2 with point, \
+		data_loc index 5 using 1:3 with point
+
+	set title sprintf("Simulation %s: %s government interventions", dataset_idx, dataset_name)
+	unset logscale y
+	plot for [i=2:num_columns_4] data_loc index 4 using 1:i, \
+		data_loc index 5 using 1:2 with point, \
+		data_loc index 5 using 1:3 with point
+
+	set title sprintf("Simulation %s: %s government interventions (log-scale)", dataset_idx, dataset_name)
+	set logscale y
+	plot for [i=2:num_columns_4] data_loc index 4 using 1:i, \
+		data_loc index 5 using 1:2 with point, \
+		data_loc index 5 using 1:3 with point
 }
 
 if (interact == 0) {

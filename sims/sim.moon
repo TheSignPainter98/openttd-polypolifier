@@ -60,8 +60,21 @@ class Simulation
 		@output_sim_result f, @results.gov
 		f\close!
 	output_sim_result: (f, sim_result) =>
-		fields = { 'cash', 'value' }
+		@output_fields f, sim_result, { 'cash', 'value' }
+		f\write '\n\n'
+		@output_fields f, sim_result, { 'granted', 'taxed' }
 
+		f\write '\n\n'
+		f\write @fmt_record { 'month', 'value-at-bankruptcy', 'cash-at-bankruptcy', 'company' }
+
+		bankrupted = {}
+		for month = 1, #sim_result
+			for company in *sim_result[month]
+				continue unless company.bankrupt
+				continue if bankrupted[company.ref]
+				bankrupted[company.ref] = true
+				f\write @fmt_record { month - 1, company.value, company.cash, company.ref }
+	output_fields: (f, sim_result, fields) =>
 		-- Write the header
 		head = { 'month' }
 		insert head, "#{field}-#{cstat.ref}" for field in *fields for cstat in *sim_result[1]
@@ -74,18 +87,6 @@ class Simulation
 				for f in *fields
 					insert record, cstat.bankrupt and '' or cstat[f]
 			f\write @fmt_record record
-
-		f\write '\n\n'
-		f\write @fmt_record { 'month', 'value-at-bankruptcy', 'cash-at-bankruptcy', 'company' }
-
-		bankrupted = {}
-		for month = 1, #sim_result
-			for company in *sim_result[month]
-				continue unless company.bankrupt
-				continue if bankrupted[company.ref]
-				bankrupted[company.ref] = true
-				f\write @fmt_record { month - 1, company.value, company.cash, company.ref }
-
 	fmt_record: (rec) => (concat rec, ',') .. '\n'
 
 sims = {
