@@ -171,7 +171,7 @@ class Flakey extends Addict
 	__tostring: => super!
 
 class Delayed extends Addict
-	start_month: 36 + 36 * random!
+	start_month: 12 * (10 + 5 * random!)
 	pre_month: (month) => @has_started = @start_month <= month
 	__tostring: => super!
 
