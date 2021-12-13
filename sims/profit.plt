@@ -3,7 +3,7 @@
 set datafile separator ","
 
 if (interact == 0) {
-	set terminal pdf size 10,5 font "OpenTTD"
+	set terminal pdf size 10,5 font "OpenTTD,10"
 } else {
 	set terminal qt font "OpenTTD"
 }
@@ -40,17 +40,17 @@ do for [dataset in datasets] {
 		data_loc index 1 using 1:2 with point, \
 		data_loc index 1 using 1:3 with point
 
-	set title sprintf("Dataset '%s' without government intervention (log-scale)", dataset)
-	set logscale y
-	plot for [i=2:num_columns] data_loc index 0 using 1:i, \
-		data_loc index 1 using 1:2 with point, \
-		data_loc index 1 using 1:3 with point
-
 	set title sprintf("Dataset '%s' with government intervention", dataset)
 	unset logscale y
 	plot for [i=2:num_columns] data_loc index 2 using 1:i, \
 		data_loc index 3 using 1:2 with point, \
 		data_loc index 3 using 1:3 with point
+
+	set title sprintf("Dataset '%s' without government intervention (log-scale)", dataset)
+	set logscale y
+	plot for [i=2:num_columns] data_loc index 0 using 1:i, \
+		data_loc index 1 using 1:2 with point, \
+		data_loc index 1 using 1:3 with point
 
 	set title sprintf("Dataset '%s' with government intervention (log-scale)", dataset)
 	set logscale y
