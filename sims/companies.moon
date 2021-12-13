@@ -8,8 +8,11 @@ HQ_COST = 300
 LOAN_INCREMENT = 10000
 LOAN_INTEREST_RATE = 0.004074124 -- (1 + 0.05)^(1/12) - 1
 LOAN_MAX = 300000
-VAL_CONVERSION = 0.5
-VAL_PROFIT_RATE = 0.25
+VAL_CONVERSION = args.value_conversion
+VAL_PROFIT_RATE = args.value_profit_rate
+VAL_PROFIT_DEVIATION = args.profit_deviation
+SPENDING_CAP = args.spending_cap
+SPENDING_CAP_DEVIATION = args.spending_cap_deviation
 
 class Company
 	new: (@name, @initial_cash=100000, @initial_loan=initial_cash, @initial_value=1) =>
@@ -51,7 +54,7 @@ class Company
 
 	-- Innate behaviour
 	earn: =>
-		@earnings = VAL_PROFIT_RATE * @value
+		@earnings = VAL_PROFIT_RATE * @value * (1 - 2 * VAL_PROFIT_DEVIATION * (random! - 0.5))
 		@cash += @earnings
 	deduct_loan_interest: => @cash -= @loan * LOAN_INTEREST_RATE
 	loan_increment_round: (amt, up=false) => (1 + amt // LOAN_INCREMENT + (up and 1 or 0)) * LOAN_INCREMENT
@@ -64,6 +67,11 @@ class Company
 		-- Preconditions
 		return 0 unless amt > 0
 		return 0 unless amt < @cash - @loan + @loan_max
+
+		-- Cap the spending amount
+		if SPENDING_CAP > 0
+			spending_cap = SPENDING_CAP * (1 - 2 * SPENDING_CAP_DEVIATION * (random! - 0.5))
+			amt = spending_cap if spending_cap < amt
 
 		-- If can't pay, take out a loan
 		if @cash < amt and @auto_loan
