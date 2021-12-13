@@ -62,7 +62,7 @@ class Gov
 
 			for c in *@companies
 				continue unless c.has_started and c\active! and c.has_hq
-				@collected += 10000
+				@collected += @props.annuity_min
 				c.grant_max = @get_annuity_grant_cap c
 				tot_grant_max += c.grant_max
 			for c in *@companies
@@ -74,7 +74,7 @@ class Gov
 			tot_value = @get_total_value @companies, => @active!
 			for c in *@companies
 				continue unless c\active!
-				levy = (0.01 + (0.05 - 0.01) * c.value / tot_value) * c.earnings
+				levy = (@props.agency_tax_min + (@props.agency_tax_max - @props.agency_tax_min) * c.value / tot_value) * c.earnings
 				@collected += levy
 				@tax c, levy, 'annuity-tax'
 
@@ -99,13 +99,12 @@ class Gov
 
 	-- Defaults
 	@default_props:
-		annuity: 100000
+		annuity_min: 10000
 		bandit_tax_rate: .05
 		bandit_tax_min: 5500
-		robin_hood_rate: .10
-		agency_tax_threshold: 50000
-		agency_tax_rate: 0.01
-		agency_tax_overdraft_rate: .20
+		robin_hood_rate: .2
+		agency_tax_min: .05
+		agency_tax_max: .25
 		pot_initial_content: 400000
 		pot_company_change_boost: 100000
 		pot_rate: -1 + sqrt sqrt 1 + .05
