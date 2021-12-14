@@ -98,9 +98,6 @@ class CompanyList extends Module
 			earnings = Util.Max(0, GSCompany.GetQuarterlyIncome(id, GSCompany.CURRENT_QUARTER + 1)),
 		}
 
-		/* local q_perf = GSCompany.GetQuarterlyPerformanceRating(id, GSCompany.CURRENT_QUARTER); */
-		/* company.q_perf <- q_perf == -1 ? 0 : q_perf; */
-
 		{
 			local _ = GSCompanyMode(id);
 			company.loaned <- GSCompany.GetLoanAmount();

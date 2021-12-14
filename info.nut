@@ -217,17 +217,16 @@ class GovGSInfo extends GSInfo
 	function GetSettings()
 		for (local i = 0; i < SELF_SETTINGS.len(); i++)
 		{
-			local setting = SELF_SETTINGS[i]
-			local labels = null
+			local setting = SELF_SETTINGS[i];
+			local labels = null;
 			if ("labels" in setting)
 			{
-				labels = setting.labels
-				delete setting.labels
+				labels = setting.labels;
+				delete setting.labels;
 			}
-			AddSetting(setting)
+			AddSetting(setting);
 			if (labels)
-				AddLabels(setting.name, labels)
-		}
+				AddLabels(setting.name, labels);
 }
 
 RegisterGS(GovGSInfo());
