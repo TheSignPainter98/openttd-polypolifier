@@ -32,7 +32,7 @@ class RobinHoodScheme extends Module
 		// Ensure at multiple players are playing
 		if (n_companies < 2)
 		{
-			GSLog.Error("Robin hood cannot be operated without distinct benefactors and financiers");
+			GSLog.Error("Robin hood cannot be operated at least two companies present.");
 			return;
 		}
 
@@ -56,6 +56,12 @@ class RobinHoodScheme extends Module
 			GSLog.Error("No valid Robin Hood beneficiaries!");
 			return;
 		}
+		foreach (c_to_tax in cs_to_tax)
+			if (beneficiary.id == c_to_tax.id)
+			{
+				GSLog.Error("Robin hood cannot be operated without distinct benefactors and financiers");
+				return;
+			}
 
 		local cs_to_tax = companies.slice(-n_taxed_companies);
 		local cs_to_tax_tot_value = 0;
