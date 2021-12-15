@@ -14,7 +14,7 @@ class Finances
 
 	function _MoneyDelta(company, amt)
 	{
-		amt = amt.tointeger()
+		amt = amt.tointeger();
 		if (amt >= 0)
 			GSLog.Error("Paying £" + amt + " to " + company.name + " (" + company.id + ")");
 		else

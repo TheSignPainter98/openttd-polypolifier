@@ -227,6 +227,7 @@ class GovGSInfo extends GSInfo
 			AddSetting(setting);
 			if (labels)
 				AddLabels(setting.name, labels);
+		}
 }
 
 RegisterGS(GovGSInfo());
