@@ -210,7 +210,7 @@ class GovGSInfo extends GSInfo
 	function GetName() { return "Her Majesty's Government"; }
 	function GetDescription() { return "A socialist balancer to encourage polypolies"; }
 	function GetVersion() { return VERSION; }
-	function GetDate() { return "1900-01-01"; }
+	function GetDate() { return "2020-12-16"; }
 	function CreateInstance() { return "MultiGS"; }
 	function GetShortName() { return "GVMT"; }
 	function GetAPIVersion() { return "12"; }
