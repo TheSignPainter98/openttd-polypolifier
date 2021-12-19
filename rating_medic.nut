@@ -31,7 +31,7 @@ class RatingMedic extends Module
 	{
 		tiles = GSTileList();
 		for (local x = 0; x < size_x; x++)
-			for (local y = 0; y < size_x; y++)
+			for (local y = 0; y < size_y; y++)
 			{
 				local t = GSMap.GetTileIndex(x, y);
 				if (GSMap.IsValidTile(t) && GSTown.IsValidTown(GSTile.GetTownAuthority(t)))
