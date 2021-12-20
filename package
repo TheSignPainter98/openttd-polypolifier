@@ -1,3 +1,4 @@
 #!/bin/bash
 
 ./scripts/changelog.sh > changelog.txt
+tar -cf hmrc.tar $(find -name '*.nut') changelog.txt license.txt lang/*.txt
