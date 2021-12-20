@@ -176,8 +176,8 @@ class MultiGS extends GSController
 				first = false;
 
 			// Wait until the start of the next day.
-			local ticks_taken = iter_start_tick - GetTick();
-			local wait = (DAY_TICKS - ticks_taken) % DAY_TICKS;
+			local ticks_taken = GetTick() - iter_start_tick;
+			local wait = 1 + (DAY_TICKS - ticks_taken - 1) % DAY_TICKS;
 			if (wait < 0)
 				wait += DAY_TICKS;
 			Sleep(wait);
