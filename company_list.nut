@@ -129,6 +129,8 @@ class CompanyList extends Module
 			return true;
 		if (!(id in prev_activity_data))
 			return true;
+		if (!(id in activity_data))
+			return true;
 
 		local curr_data = activity_data[id];
 		local prev_data = prev_activity_data[id];
