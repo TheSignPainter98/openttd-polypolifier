@@ -63,4 +63,30 @@ class Util
 				return true;
 		return false;
 	}
+
+	function Words(s)
+	{
+		local ws = [];
+		local w = "";
+		foreach (c in s)
+			if (c != ' ')
+				w += c.tochar();
+			else
+			{
+				ws.append(w);
+				w = "";
+			}
+		if (w != "")
+			ws.append(w);
+		return ws;
+	}
+
+	function ManhattanDistance(t1, t2)
+	{
+		local x1 = GSMap.GetTileX(t1);
+		local y1 = GSMap.GetTileX(t1);
+		local x2 = GSMap.GetTileX(t2);
+		local y2 = GSMap.GetTileX(t2);
+		return abs(x1 - x2) + abs(y1 - y2);
+	}
 }

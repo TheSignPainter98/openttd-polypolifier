@@ -8,6 +8,7 @@ require("pot.nut")
 require("rating_medic.nut")
 require("robin_hood_scheme.nut")
 require("setting_names.nut")
+require("supermarket.nut")
 require("version.nut")
 require("welcome.nut")
 
@@ -47,6 +48,8 @@ class MultiGS extends GSController
 		local pot = Pot();
 		PollAnnuity(pot, companies);
 		AgencyTax(pot, companies);
+
+		SupermarketFounder();
 
 		// Fix annoying rating changes.
 		if (GetSetting(::RATING_MEDIC))

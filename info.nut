@@ -202,6 +202,28 @@ SELF_SETTINGS <- [
 		custom_value = 0
 		flags = GSInfo.CONFIG_BOOLEAN
 	}
+	{
+		name = SUPERMARKET_SIGNS
+		description = "Add supermarket signs above general stores"
+		easy_value = 1
+		medium_value = 1
+		hard_value = 1
+		custom_value = 1
+		flags = GSInfo.CONFIG_BOOLEAN | GSInfo.CONFIG_INGAME
+	}
+	{
+		name = SUPERMARKET_SIGN_MIN_DISTANCE
+		description = "Minimum distance between the centre of town and a supermarket sign"
+		min_value = 1
+		max_value = 100
+		easy_value = 5
+		medium_value = 5
+		hard_value = 5
+		custom_value = 5
+		random_deviation = 0
+		step_size = 1
+		flags = GSInfo.CONFIG_INGAME
+	}
 ]
 
 class GovGSInfo extends GSInfo

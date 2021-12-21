@@ -1,5 +1,7 @@
 DOMAIN <- "gov"
 
+SUPERMARKET_SIGNS <- DOMAIN + ".supermarket_signs"
+SUPERMARKET_SIGN_MIN_DISTANCE <- DOMAIN + ".supermarket_name_distance"
 ANNUITY_BASELINE <- DOMAIN + ".annuity_baseline"
 ANNUITY_LOW_THRESHOLD <- DOMAIN + ".annuity_low_threshold"
 ANNUITY_MED_THRESHOLD <- DOMAIN + ".annuity_med_threshold"
