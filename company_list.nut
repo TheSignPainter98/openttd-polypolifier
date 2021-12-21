@@ -59,10 +59,14 @@ class CompanyList extends Module
 		local n_companies = company_ids.len();
 		GSLog.Error("Collating data on " + n_companies + " companies");
 		for (local i = 0; i < n_companies; i++)
-			if (GSCompany.GetName(company_ids[i]) != "TownCars")
+		{
+			local name = GSCompany.GetName(company_ids[i]);
+			local name_words = Util.Words(name);
+			if (name_words.len() < 1 || name_words[0] != "TownCars")
 				companies.append(GetCompanyInfo(company_ids[i], join_dates[i]))
 			else
 				GSLog.Error("Ignoring company " + GSCompany.GetName(company_ids[i]));
+		}
 	}
 
 	function OnYear(_)
