@@ -52,6 +52,7 @@ class NewsAlerter extends Module
 		local rand_company = c_list[rand % c_list.len()];
 
 		local ret = [];
+		ret.append(NewsStory("NEWS_CAT"));
 		ret.append(NewsStory("NEWS_LOST_CAT"));
 		ret.append(NewsStory("NEWS_BREAD_PRICES"));
 		ret.append(NewsStory(GSText(GSText.NEWS_CLICK_BAIT, rand_company.id)));

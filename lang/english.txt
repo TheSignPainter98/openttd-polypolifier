@@ -12,8 +12,9 @@ NEWS_BREXIT				:Brexit means Brexit, all transport companies are ordered to dest
 # NEWS_NO_FOOD			:Residents of {TOWN} facing starvation as {COMPANY} fails to deliver food. How long until they start to eat the cats?
 # NEWS_POWER				:After years of wondering what that big building near town did, residents of {TOWN} shocked to find out they’ve been living next to a power station. Television, food-mixer and washing-machine related accidents up 70% as residents collectively figure out why they weren’t working.
 NEWS_PANDEMIC			:As cases of a mystery virus start to appear, consumers urged to take public transport as usual to ensure the riches of regional transport tycoons
+NEWS_CAT				:“What do you think, puss?” Local cat indifferent to the plight and suffering of millions.
 NEWS_LOST_CAT			:Sally from Winchester finds cat which ran away ten years ago but it turned out it be just a similar-looking cat
-NEWS_BREAD_PRICES		:“you’rehavingalaugh”: consumers’ flabbergasted reactions to the news that Marks and Spencer’s bread is both better and cheaper than Tesco bread
+NEWS_BREAD_PRICES		:“you’rehavingalaugh”: consumers’ flabbergasted reactions to the news that Marks and Spencer’s bread is both better and cheaper than Tesco’s bread
 NEWS_CLICK_BAIT			:You won’t believe this one simple trick for staying young and gorgeous, turns out TAKING PUBLIC TRANSPORT is good for you! (Sponsored for by {COMPANY})
 NEWS_MORAL_PANIC		:“Where have our children gone?” Concerned loved ones give their thoughts on the societal costs of the recent tsunami of OpenTTD addictions
 NEWS_PAGERS				:Local man intercepts insecure transmissions, says he has an idea for a better system, refuses to elaborate further and leaves
