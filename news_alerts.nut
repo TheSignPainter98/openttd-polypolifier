@@ -71,6 +71,7 @@ class NewsAlerter extends Module
 		ret.append(NewsStory(GSText(GSText.NEWS_HUNGER_STRIKE, Locs.LARGE_CITY)));
 		ret.append(NewsStory("NEWS_SUSHI"));
 		ret.append(NewsStory("NEWS_TOYS"));
+		ret.append(NewsStory("NEWS_SANTA_OUSTED"));
 
 		// TODO: the dead towns thing
 		// TODO: the no food one
