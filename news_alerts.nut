@@ -46,7 +46,7 @@ class NewsAlerter extends Module
 		if (curr_year == 2020 && curr_month == 3)
 			return [ NewsStory("NEWS_PANDEMIC") ];
 		if (curr_year == 2025)
-			ret.append(NewsStory("NEWS_NFTS"));
+			return [ NewsStory("NEWS_NFTS") ];
 
 		local c_list = companies.GetInfoList();
 		local rand_company = c_list[rand % c_list.len()];
