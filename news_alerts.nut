@@ -90,8 +90,8 @@ class NewsStory
 	{
 		this.input_text = text;
 		this.text = typeof(text) == "instance" || typeof(text) == "integer" ? text : GSText(GSText[text]);
-		this.ref_type = vargc < 2 ? Locs.NR_CAPITAL : vargv[0];
-		this.ref = vargc < 2 ? Locs.CAPITAL : vargv[1];
+		this.ref_type = vargc < 2 ? GSNews.NR_NONE : vargv[0];
+		this.ref = vargc < 2 ? -1 : vargv[1];
 	}
 
 	function MakeNews()
