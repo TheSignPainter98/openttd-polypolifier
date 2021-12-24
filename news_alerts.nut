@@ -10,6 +10,14 @@ class NewsAlerter extends Module
 		this.companies = companies;
 	}
 
+	function PostInit()
+	{
+		local date = GSDate.GetCurrentDate();
+		local m = GSDate.GetMonth(date);
+		local y = GSDate.GetYear(date);
+		RandomNews(m, y);
+	}
+
 	function OnMonth(argv)
 	{
 		local month = argv[0];
