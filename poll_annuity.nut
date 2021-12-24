@@ -1,7 +1,7 @@
+require("finances.nut");
 require("locations.nut");
 require("module.nut");
 require("setting_names.nut");
-require("finances.nut");
 
 class PollAnnuity extends Module
 {
@@ -72,7 +72,9 @@ class PollAnnuity extends Module
 		{
 			if (!company.active || company.hq == GSMap.TILE_INVALID)
 				continue;
-			Finances.Grant(company, baseline + Util.Min(company.poll_annuity_max_payout, pot.GetContents() * company.poll_annuity_max_payout / tot_grant_max));
+			local grant = baseline + Util.Min(company.poll_annuity_max_payout, pot.GetContents() * company.poll_annuity_max_payout / tot_grant_max);
+			Finances.Grant(company, grant);
+			GSNews.Create(GSNews.NT_GENERAL, GSText(GSText.POLL_ANNUITIED, grant, company.id), company.id, Locs.NR_CAPITAL, Locs.CAPITAL);
 		}
 
 		// Government takes any leftovers for itself.

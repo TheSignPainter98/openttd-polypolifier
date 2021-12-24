@@ -3,6 +3,7 @@ require("bandit_tax.nut")
 require("company_list.nut")
 require("fine.nut")
 require("module.nut")
+require("news_alerts.nut")
 require("poll_annuity.nut")
 require("pot.nut")
 require("rating_medic.nut")
@@ -49,6 +50,8 @@ class MultiGS extends GSController
 		PollAnnuity(pot, companies);
 		AgencyTax(pot, companies);
 
+		// World-building
+		NewsAlerter(companies);
 		SupermarketFounder();
 
 		// Fix annoying rating changes.

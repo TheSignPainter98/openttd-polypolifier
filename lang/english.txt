@@ -1,10 +1,35 @@
 CANNOT_RH_GRANT_NO_CASH	:Government out of money! Robin Hood tax payout cancelled for Q{NUM} to help clear Treasury log jam
-POLL_ANNUITIED			:Government announces stimulus package of {CURRENCY_LONG} for all British transport companies
+POLL_ANNUITIED			:It’s payday! Government issues poll annuity of {CURRENCY_LONG} to {COMPANY}
+# POLL_ANNUITIED			:Government announces stimulus package of {CURRENCY_LONG} for all British transport companies
 # POLL_ANNUITY_MISSED		:As other transport companies across the British Isles get their {CURRENCY_LONG} poll annuity, questions are asked why {PRESIDENT_NAME} hasn't moved the HQ of {COMPANY} to the British Isles
-RH_CANNOT_OPERATE		:Westminster panic as Gov. study shows no companies eligible for Robin Hood tax benefit scheme for UK-based companies
-ROBIN_HOODED			:{COMPANY} selected by the government to receive a stimulus grant of {CURRENCY_LONG}
+# RH_CANNOT_OPERATE		:Westminster panic as Gov. study shows no companies eligible for Robin Hood tax benefit scheme for UK-based companies
+# ROBIN_HOODED			:{COMPANY} selected by the government to receive a stimulus grant of {CURRENCY_LONG}
 WELCOME_FIRST			:Government announces tax breaks and new stimulus scheme for all companies headquartered in the British Isles. CEO of {COMPANY}, {PRESIDENT_NAME}, to be congratulated on ability to read fine print.
 NO_HQ_REMINDER			:FREE MONEY BONANZA! Government announces tax breaks and new stimulus scheme for all companies headquartered in the UK and ROI. Consumers shocked and appalled to learn that {COMPANY} {COMPANY_NUM} does not have its HQ in the British Isles, and hence will not benefit.
+
+NEWS_BREXIT				:Brexit means Brexit, all transport companies are ordered to destroy bridges and cargo lines between Britain and the EU because it will make things better
+# NEWS_DEAD_TOWN			:Exclusive: the ghost town of {TOWN}. Investigation launched to find out why everyone is now dead and to see what can be done about it.
+# NEWS_NO_FOOD			:Residents of {TOWN} facing starvation as {COMPANY} fails to deliver food. How long until they start to eat the cats?
+# NEWS_POWER				:After years of wondering what that big building near town did, residents of {TOWN} shocked to find out they’ve been living next to a power station. Television, food-mixer and washing-machine related accidents up 70% as residents collectively figure out why they weren’t working.
+NEWS_PANDEMIC			:As cases of a mystery virus start to appear, consumers urged to take public transport as usual to ensure the riches of regional transport tycoons
+NEWS_LOST_CAT			:Sally from Winchester finds cat which ran away ten years ago but it turned out it be just a similar-looking cat
+NEWS_BREAD_PRICES		:“you’rehavingalaugh”: consumers’ flabbergasted reactions to the news that Marks and Spencer’s bread is both better and cheaper than Tesco bread
+NEWS_CLICK_BAIT			:You won’t believe this one simple trick for staying young and gorgeous, turns out TAKING PUBLIC TRANSPORT is good for you! (Sponsored for by {COMPANY})
+NEWS_MORAL_PANIC		:“Where have our children gone?” Concerned loved ones give their thoughts on the societal costs of the recent tsunami of OpenTTD addictions
+NEWS_PAGERS				:Local man intercepts insecure transmissions, says he has an idea for a better system, refuses to elaborate further and leaves
+NEWS_SUPERMARKET		:CEO of Tesco’s international to resign after scandal in which horse meat was found in the crisps aisle
+NEWS_NFTS				:Global food shortages continue as cool millenials trade real money for
+NEWS_CLIMATE			:“It wasn’t out fault! Please stop with the hate mail!” says oil magnate as eternal winter set to continue
+NEWS_NUTJOB				:“Don’t trust the trees!” says man wearing tin foil hat, “they move when you’re not looking”
+NEWS_NO_CHRISTMAS		:Father Christmas cancels worldwide present flight as the running costs of reindeers are just too steep
+NEWS_POLICE				:Police investivate explosive incident, transport company CEOs to be questioned
+NEWS_STATUES			:A study found that 0/0 residents of city replaced by company CEO statues disliked the new decor
+NEWS_CORRUPTION			:Police launch investigation into town which permitted its own destruction, bribery suspected
+NEWS_TRAFFIC			:Are the roads actually any better? We investigate what positive changes 6 months of road works have actually made
+NEWS_ENVIRONMENTALIST	:“Please stop landfilling the sea, the fish don’t like it” says girl protesting contraversial land bridges
+NEWS_RESIDENT			:“This used to be a nice place” local resident bemoans {TOWN}’s expansion from 3,000 to {COMMA} residents
+NEWS_HUNGER_STRIKE		:Visible confusion among Transport tycoons as {TOWN} continues its hunger strike with no demands as yet
+NEWS_SUSHI				:Sushi chefs continue to refuse work outside of ports, a consumer reacts: “Oh, okay then.”
 
 # {"NORMAL_FONT",       EmitSingleChar, SCC_NORMALFONT,         0, -1, C_NONE},
 # {"TINY_FONT",         EmitSingleChar, SCC_TINYFONT,           0, -1, C_NONE},
