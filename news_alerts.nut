@@ -16,7 +16,7 @@ class NewsAlerter extends Module
 		local year = argv[1];
 
 		// Fire in a semi-random month
-		GSLog.Error("Rando chcek: " + ((month * 359) % 12) + " != " + (997 * year) % 12)
+		GSLog.Error("$$ Rando news check: " + ((month * 359) % 12) + " != " + (997 * year) % 12)
 		if ((month * 359) % 12 != (997 * year) % 12)
 			return;
 
@@ -69,6 +69,7 @@ class NewsAlerter extends Module
 		ret.append(NewsStory(GSText(GSText.NEWS_RESIDENT, Locs.LARGE_CITY, GSTown.GetPopulation(Locs.LARGE_CITY))));
 		ret.append(NewsStory(GSText(GSText.NEWS_HUNGER_STRIKE, Locs.LARGE_CITY)));
 		ret.append(NewsStory("NEWS_SUSHI"));
+		ret.append(NewsStory("NEWS_TOYS"));
 
 		// TODO: the dead towns thing
 		// TODO: the no food one
@@ -96,6 +97,7 @@ class NewsStory
 	function MakeNews()
 	{
 		GSLog.Error("Printing news: " + input_text + ", " + text);
-		GSNews.Create(GSNews.NT_GENERAL, text, GSCompany.COMPANY_INVALID, ref_type, ref);
+		for (local i = GSCompany.COMPANY_FIRST; i <= GSCompany.COMPANY_LAST; i++)
+			GSNews.Create(GSNews.NT_GENERAL, text, i, ref_type, ref);
 	}
 }

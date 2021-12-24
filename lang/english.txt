@@ -18,18 +18,19 @@ NEWS_CLICK_BAIT			:You won’t believe this one simple trick for staying young a
 NEWS_MORAL_PANIC		:“Where have our children gone?” Concerned loved ones give their thoughts on the societal costs of the recent tsunami of OpenTTD addictions
 NEWS_PAGERS				:Local man intercepts insecure transmissions, says he has an idea for a better system, refuses to elaborate further and leaves
 NEWS_SUPERMARKET		:CEO of Tesco’s international to resign after scandal in which horse meat was found in the crisps aisle
-NEWS_NFTS				:Global food shortages continue as cool millenials trade real money for
+NEWS_NFTS				:Global food shortages continue as cool millennials trade real money for
 NEWS_CLIMATE			:“It wasn’t out fault! Please stop with the hate mail!” says oil magnate as eternal winter set to continue
 NEWS_NUTJOB				:“Don’t trust the trees!” says man wearing tin foil hat, “they move when you’re not looking”
 NEWS_NO_CHRISTMAS		:Father Christmas cancels worldwide present flight as the running costs of reindeers are just too steep
-NEWS_POLICE				:Police investivate explosive incident, transport company CEOs to be questioned
+NEWS_POLICE				:Police investigate explosive incident, transport company CEOs to be questioned
 NEWS_STATUES			:A study found that 0/0 residents of city replaced by company CEO statues disliked the new decor
 NEWS_CORRUPTION			:Police launch investigation into town which permitted its own destruction, bribery suspected
 NEWS_TRAFFIC			:Are the roads actually any better? We investigate what positive changes 6 months of road works have actually made
-NEWS_ENVIRONMENTALIST	:“Please stop landfilling the sea, the fish don’t like it” says girl protesting contraversial land bridges
+NEWS_ENVIRONMENTALIST	:“Please stop land-filling the sea, the fish don’t like it” says girl protesting contraversial land bridges
 NEWS_RESIDENT			:“This used to be a nice place” local resident bemoans {TOWN}’s expansion from 3,000 to {COMMA} residents
 NEWS_HUNGER_STRIKE		:Visible confusion among Transport tycoons as {TOWN} continues its hunger strike with no demands as yet
 NEWS_SUSHI				:Sushi chefs continue to refuse work outside of ports, a consumer reacts: “Oh, okay then.”
+NEWS_TOYS				:Elves on strike again as Lapland conditions worsen due to absence of non-Christmas days
 
 # {"NORMAL_FONT",       EmitSingleChar, SCC_NORMALFONT,         0, -1, C_NONE},
 # {"TINY_FONT",         EmitSingleChar, SCC_TINYFONT,           0, -1, C_NONE},
